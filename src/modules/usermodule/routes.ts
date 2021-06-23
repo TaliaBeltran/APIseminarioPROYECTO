@@ -12,18 +12,24 @@ class Routes {
   private configureRoutes(app: Express) {
     //**--USER ROUTES--------------------------------------------------------------------------------------- */
     app.route(`${this.routeparent}/login`).post(this.routesController.login);
+
+    app
+      .route(`${this.routeparent}/refreshToken`)
+      .post(this.routesController.refreshToken);
     app
       .route(`${this.routeparent}/users`)
-      .post(this.routesController.createUsers);
+      .post(jsonwebtokenSecurity, this.routesController.createUsers);
+
     app
       .route(`${this.routeparent}/users`)
-      .get(this.routesController.getUsers);
+      .get(jsonwebtokenSecurity, this.routesController.getUsers);
+
     app
       .route(`${this.routeparent}/users/:id`)
       .put(this.routesController.updateUsers);
     app
       .route(`${this.routeparent}/users/:id`)
-      .delete(this.routesController.removeUsers);
+      .delete(jsonwebtokenSecurity, this.routesController.removeUsers);
     app
       .route(`${this.routeparent}/uploadportrait/:id`)
       .post(this.routesController.uploadPortrait);
@@ -33,21 +39,30 @@ class Routes {
 
     app
       .route(`${this.routeparent}/addrol/:id`)
-      .put(this.routesController.addRol);
+      .put(jsonwebtokenSecurity, this.routesController.addRol);
     app
       .route(`${this.routeparent}/removerol/:id`)
-      .put(this.routesController.removeUserRol);
+      .put(jsonwebtokenSecurity, this.routesController.removeUserRol);
 
     //**--ROLES ROUTES--------------------------------------------------------------------------------------- */
     app
       .route(`${this.routeparent}/roles`)
-      .post(this.routesController.createRol);
+      .post(jsonwebtokenSecurity, this.routesController.createRol);
+    app
+      .route(`${this.routeparent}/roles`)
+      .get(jsonwebtokenSecurity, this.routesController.getRol);
     app
       .route(`${this.routeparent}/roles/:id`)
-      .delete(this.routesController.removeRol);
+      .delete(jsonwebtokenSecurity, this.routesController.removeRol);
+
+    //--------AÑADIR O ELIMINAR CLIENTES A USUARIOS -----------
     app
-      .route(`${this.routeparent}/roles/`)
-      .get(this.routesController.getRoles);
+      .route(`${this.routeparent}/addclient/:id`)
+      .put(this.routesController.addClient);
+
+    app
+      .route(`${this.routeparent}/removeclient/:id`)
+      .put(this.routesController.removeClient);
   }
 }
 export default Routes;

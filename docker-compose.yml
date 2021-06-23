@@ -24,7 +24,7 @@ services:
       - 5672:5672
       - 5673:5673
     logging:
-      driver: none
+      driver: "none"
   mongo:
     image: mongo
     ports:

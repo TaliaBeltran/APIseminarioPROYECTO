@@ -25,7 +25,10 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const bodyParser = __importStar(require("body-parser"));
 const init_1 = __importDefault(require("./modules/usermodule/init"));
+const init_2 = __importDefault(require("./modules/clientsmodels/init"));
+const init_3 = __importDefault(require("./modules/pedidosmodule/init"));
 const mongoose_1 = __importDefault(require("mongoose"));
+const express_fileupload_1 = __importDefault(require("express-fileupload"));
 class App {
     constructor() {
         this.app = express_1.default();
@@ -37,9 +40,12 @@ class App {
         let host = "mongodb://172.19.0.2:27017";
         let database = process.env.DATABASE || "seminario";
         let connectionString = `${host}/${database}`;
-        mongoose_1.default.connect(connectionString, { useNewUrlParser: true, useUnifiedTopology: true });
+        mongoose_1.default.connect(connectionString, {
+            useNewUrlParser: true,
+            useUnifiedTopology: true,
+        });
         //Eventos
-        mongoose_1.default.connection.on("error", err => {
+        mongoose_1.default.connection.on("error", (err) => {
             console.log("Connection Fail");
             console.log(err);
         });
@@ -51,10 +57,13 @@ class App {
     configuration() {
         this.app.use(bodyParser.json());
         this.app.use(bodyParser.urlencoded({ extended: false }));
+        this.app.use(express_fileupload_1.default({ limits: { fileSize: 50 * 1024 * 1024 } }));
     }
     initApp() {
-        console.log("LOAD MODULES 22222222");
+        console.log("LOAD MODULES");
         const userModule = new init_1.default("/api", this.app);
+        const clientModule = new init_2.default("/client", this.app);
+        const pedidoModule = new init_3.default("/pedido", this.app);
     }
 }
 exports.default = new App();
