@@ -6,14 +6,14 @@ export interface IClients extends Document {
   lastname: string;
   email: string;
   telephone: string;
-  descriptionphone?: string;
-  uriphoto?: string; //aqui entrara la uri donde nos llevara a la imagen
+  uriphoto?: string; // foto de tienda de cliente
   pathphoto?: string;
-  state: string;
-  probability: number;
+  state: string; //estado del cliente
+  probability: number; // probabilidad de negociacion
   zona: string;
-  street: string;
-  tipo: string; //Regular o Potencial
+  street: string; // calle y numero
+  tipo: string; //TipoCLiente: mayorista, supermercado , off
+
   registerdate: Date;
   pedidos?: Array<IPedidos>;
   reunion?: Array<IReunion>;
@@ -40,15 +40,37 @@ const clientsSchema: Schema = new Schema({
     require: true,
     unique: true,
   },
-  descriptionphone: { type: String },
-  uriphoto: { type: String /*, required: true */ },
-  pathphoto: { type: String /*, required: true*/ },
-  state: { type: String /*, required: true */ },
-  probability: { type: Number, required: true },
-  registerdate: { type: Date, required: true, default: Date.now },
-  zona: { type: String, required: true },
-  street: { type: String, required: true },
-  tipo: { type: String, default: "Potencial" },
+  uriphoto: {
+    type: String,
+  },
+  pathphoto: {
+    type: String,
+  },
+  state: {
+    type: String,
+  },
+  probability: {
+    type: Number,
+    required: true,
+  },
+  registerdate: {
+    type: Date,
+    required: true,
+    default: Date.now,
+  },
+  zona: {
+    type: String,
+    required: true,
+  },
+  street: {
+    type: String,
+    required: true,
+  },
+  tipo: {
+    type: String,
+    required: true,
+  },
+
   pedidos: { type: Array },
   reunion: { type: Array },
 });
