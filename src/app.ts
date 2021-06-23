@@ -27,7 +27,7 @@ class App {
       console.log(err);
     });
     mongoose.connection.on("open", () => {
-      console.log("-----------------database connection success!");
+      console.log("--database connection success!--");
     });
     this.mongooseClient = mongoose;
   }
