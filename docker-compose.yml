@@ -23,12 +23,8 @@ services:
       - 15672:15672
       - 5672:5672
       - 5673:5673
-<<<<<<< HEAD
     logging:
       driver: "none"
-=======
-
->>>>>>> c0265398a82db6928a686fe05e1d56ee3faf283d
   mongo:
     image: mongo
     ports:
