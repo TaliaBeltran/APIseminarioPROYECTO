@@ -7,129 +7,112 @@ import { IPedidos } from "../models/pedidos";
 import { IProducts } from "../models/Products";
 import isEmpty from "is-empty";
 import sha1 from "sha1";
+
 class RoutesControllerP {
-  public async createProduct(request: Request, response: Response) {
+  //------------- Crear Producto --------------
+  public async createProduct(req: Request, res: Response) {
     var product: BussinessProducts = new BussinessProducts();
     try {
-      var productData = request.body;
+      var productData = req.body;
       var ProductD: IProducts = productData;
       if (
-        validacion(ProductD.name) &&
-        isValueOk(ProductD.stock) &&
-        isValueOk(ProductD.price)
+        validacion(ProductD.name) && isValueOk(ProductD.stock) && isValueOk(ProductD.price)
       ) {
         if (ProductD.ofert != null) {
           if (!isValueOk(ProductD.ofert)) {
-            return response.status(300).json({
+            return res.status(300).json({
               serverResponse: "Oferta invalida",
             });
           }
         }
         let result = await product.addProduct(ProductD);
-        response.status(201).json({ serverResponse: result });
+        res.status(201).json({ serverResponse: result });
         return;
       } else {
-        return response.status(300).json({
-          serverResponse: "Verifique los valores",
-        });
+        return res.status(300).json({serverResponse: "Verifique los valores insertados"});
       }
     } catch (err) {
-      return response.status(300).json({
-        serverResponse: "Error",
-      });
+      return res.status(300).json({ serverResponse: "Error" });
     }
   }
-
-  public async getProduct(request: Request, response: Response) {
+// ----------------------- Obtener Producto ------------------
+  public async getProduct(req: Request, res: Response) {
     var products: BussinessProducts = new BussinessProducts();
     const result: Array<IProducts> = await products.readProduct();
-    response.status(200).json({ serverResponse: result });
+    res.status(200).json({ serverResponse: result });
   }
-
-  public async updateProduct(request: Request, response: Response) {
+//----------------- Actualizar Producto ------------------------
+  public async updateProduct(req: Request, res: Response) {
     var pro: BussinessProducts = new BussinessProducts();
-    let id: string = request.params.id;
-    var params = request.body;
+    let id: string = req.params.id;
+    var params = req.body;
     try {
       if (params.name) {
         if (!validacion(params.name)) {
-          return response
-            .status(300)
-            .json({ serverResponse: "Error en validacion name" });
+          return res.status(300).json({ serverResponse: "Error en validacion nombre" });
         }
       }
       if (params.stock) {
         if (!validacion(params.stock)) {
-          return response
-            .status(300)
-            .json({ serverResponse: "Error en validacion stock" });
+          return res.status(300).json({ serverResponse: "Error en validacion stock" });
         }
       }
       if (params.price) {
         if (!validacion(params.price)) {
-          return response
-            .status(300)
-            .json({ serverResponse: "Error en validacion price" });
+          return res.status(300).json({ serverResponse: "Error en validacion precio" });
         }
       }
       if (params.ofert) {
         if (!validacion(params.ofert)) {
-          return response
-            .status(300)
-            .json({ serverResponse: "Error en validacion ofert" });
+          return res.status(300).json({ serverResponse: "Error en validacion oferta" });
         }
       }
       var result = await pro.updateProduct(id, params);
-      return response.status(201).json({ serverResponse: result });
+      return res.status(201).json({ serverResponse: result });
     } catch (err) {
-      return response.status(300).json({ serverResponse: "Error" });
+      return res.status(300).json({ serverResponse: "Error" });
     }
   }
-
-  public async deleteProduct(request: Request, response: Response) {
+//--------------- Eliminar Producto -----------------------
+  public async deleteProduct(req: Request, res: Response) {
     var pro: BussinessProducts = new BussinessProducts();
     try {
-      let id: string = request.params.id;
+      let id: string = req.params.id;
       let result = await pro.deleteProducts(id);
-      response.status(200).json({ serverResponse: result });
+      res.status(200).json({ serverResponse: result });
       return;
     } catch (err) {
-      return response.status(200).json({ serverResponse: "Error" });
+      return res.status(200).json({ serverResponse: "Error" });
     }
   }
-
-  public async uploadimage(request: Request, response: Response) {
-    var id: string = request.params.id;
+//--------------------------Actualizar Imagen ------------------
+  public async uploadimage(req: Request, res: Response) {
+    var id: string = req.params.id;
     try {
       if (!id) {
-        response
-          .status(300)
-          .json({ serverResponse: "El id es necesario para subir una foto" });
+        res.status(300).json({ serverResponse: "El id es necesario para subir foto" });
         return;
       }
       var product: BussinessProducts = new BussinessProducts();
       var productToUpdate: IProducts = await product.readProduct(id);
       if (!productToUpdate) {
-        response.status(300).json({ serverResponse: "El producto no existe!" });
+        res.status(300).json({ serverResponse: "El producto no existe" });
         return;
       }
     } catch (err) {
-      return response
+      return res
         .status(300)
         .json({ serverResponse: "Hubo algun error intente de nuevo" });
     }
-    if (isEmpty(request.files)) {
-      response
-        .status(300)
-        .json({ serverResponse: "No existe un archivo adjunto" });
+    if (isEmpty(req.files)) {
+      res.status(300) .json({ serverResponse: "No existe archivo adjunto" });
       return;
     }
     var dir = `${__dirname}/../../../../avatarproductfiles`;
     var absolutepath = path.resolve(dir);
-    var files: any = request.files;
+    var files: any = req.files;
 
     var key: Array<string> = Object.keys(files);
-    /**/
     var copyDirectory = (totalpath: string, file: any) => {
       return new Promise((resolve, reject) => {
         file.mv(totalpath, (err: any, success: any) => {
@@ -151,9 +134,7 @@ class RoutesControllerP {
     for (var i = 0; i < key.length; i++) {
       var file: any = files[key[i]];
       if (
-        getFileExtension(file.name) === "jpg" ||
-        getFileExtension(file.name) === "png" ||
-        getFileExtension(file.name) === "gif" ||
+        getFileExtension(file.name) === "jpg" || getFileExtension(file.name) === "png" ||
         getFileExtension(file.name) === "jpeg"
       ) {
         var filehash: string = sha1(new Date().toString()).substr(0, 7);
@@ -166,27 +147,22 @@ class RoutesControllerP {
         try {
           var userResult: IProducts = await productToUpdate.save();
         } catch (err) {
-          return response.status(300).json({ serverResponse: err });
+          return res.status(300).json({ serverResponse: err });
         }
-
         subidas += 1;
       } else {
         nosubidas += 1;
       }
     }
-    return response.status(200).json({
-      serverResponse:
-        "Imagenes subidas: " + subidas + ", imagenes no subidas: " + nosubidas,
-    });
+    return res.status(200).json({ serverResponse:
+        "Imagen subida: " + subidas + ", imagen no subida: " + nosubidas});
   }
-
-  public async getimageProduct(request: Request, response: Response) {
-    var id: string = request.params.id;
+//---------------- Obtener el Imagen de Producto ------------------------
+  public async getimageProduct(req: Request, res: Response) {
+    var id: string = req.params.id;
     try {
       if (!id) {
-        response
-          .status(300)
-          .json({ serverResponse: "Identificador no encontrado" });
+        res.status(300).json({ serverResponse: "Identificador no encontrado" });
         return;
       }
 
@@ -194,19 +170,17 @@ class RoutesControllerP {
       var productData: IProducts = await product.readProduct(id);
 
       if (!productData) {
-        response
-          .status(300)
-          .json({ serverResponse: "Error no existe el producto" });
+        res.status(300) .json({ serverResponse: "Error del producto no existe" });
         return;
       }
     } catch (err) {
-      return response.status(300).json({ serverResponse: "Hubo algun error" });
+      return res.status(300).json({ serverResponse: "Error" });
     }
     if (productData.pathavathar == null) {
-      response.status(300).json({ serverResponse: "No existe portrait " });
+      res.status(300).json({ serverResponse: "No existe portrait " });
       return;
     }
-    response.sendFile(productData.pathavathar);
+    res.sendFile(productData.pathavathar);
   }
 }
 

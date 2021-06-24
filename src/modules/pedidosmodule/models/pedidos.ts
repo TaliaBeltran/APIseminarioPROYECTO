@@ -12,14 +12,38 @@ export interface IPedidos extends Document {
   total: number;
   Recibo: Array<IRecibo>;
 }
-const pedidoSchema: Schema = new Schema({
-  state: { type: String, required: true, default: "Sin Entregar" },
-  products: { type: Array },
-  registerdate: { type: Date, required: true, default: Date.now },
-  ordenarP: { type: String, required: true, default: "off" },
-  methodpay: { type: String, required: true },
-  cuentaBancaria: { type: String },
-  total: { type: Number, default: 0 },
-  Recibo: { type: Array },
+const pedidosSchema: Schema = new Schema({
+  state: { 
+    type: String, 
+    required: true, 
+    default: "Pedido Sin Entregar",
+   },
+  products: { 
+    type: Array,
+   },
+  registerdate: { 
+    type: Date, 
+    required: true, 
+    default: Date.now,
+   },
+  ordenarP: { 
+    type: String, 
+    required: true, 
+    default: "OFF",
+   },
+  methodpay: { 
+    type: String, 
+    required: true,
+   },
+  cuentaBancaria: { 
+    type: String,
+   },
+  total: { 
+    type: Number, 
+    default: 0,
+   },
+  Recibo: { 
+    type: Array,
+   },
 });
-export default mongoose.model<IPedidos>("Pedido", pedidoSchema);
+export default mongoose.model<IPedidos>("Pedido", pedidosSchema);

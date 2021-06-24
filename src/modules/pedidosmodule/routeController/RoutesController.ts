@@ -9,10 +9,11 @@ import { IPedidos } from "../models/pedidos";
 import sha1 from "sha1";
 
 class RoutesController {
-  public async createPedido(request: Request, response: Response) {
+  //----------------- CReacion del Pedido ---------------------
+  public async createPedido(req: Request, res: Response) {
     var pedidos: BussinessPedidos = new BussinessPedidos();
     try {
-      var pedidoData = request.body;
+      var pedidoData = req.body;
       var PedidoD: IPedidos = pedidoData;
 
       if (validacionOrdenarP(PedidoD.ordenarP)) {
@@ -20,46 +21,39 @@ class RoutesController {
           if (PedidoD.cuentaBancaria) {
             pedidoData["cuentaBancaria"] = sha1(pedidoData["cuentaBancaria"]);
             let result = await pedidos.addPedidos(pedidoData);
-            response.status(201).json({ serverResponse: result });
+            res.status(201).json({ serverResponse: result });
             return;
           } else {
-            return response
-              .status(300)
-              .json({ serverResponse: "Es necesario el numero de cuenta" });
+            return res.status(300).json({ serverResponse: "Es necesario el Cuenta Bancaria" });
           }
         } else if (PedidoD.methodpay.toLowerCase() === "efectivo") {
           let result = await pedidos.addPedidos(pedidoData);
-          response.status(201).json({ serverResponse: result });
+          res.status(201).json({ serverResponse: result });
           return;
         } else {
-          return response.status(300).json({
-            serverResponse:
-              "Introduzca valores correctos en el parametro methodpay",
-          });
+          return res.status(300).json({serverResponse:"Introduzca valores correctos"});
         }
       } else {
-        return response.status(201).json({
-          serverResponse:
-            /*result */ "Introduzca valores correctos en el parametro ordenarP",
-        });
+        return res.status(201).json({serverResponse: "Introduzca valores correctos al ordenar"});
       }
     } catch (err) {
-      return response.status(300).json({
+      return res.status(300).json({
         serverResponse: "Error",
       });
     }
   }
 
-  public async getPedido(request: Request, response: Response) {
+  // -----------Agregar Pedido ----------------------
+  public async getPedido(req: Request, res: Response) {
     var pedido: BussinessPedidos = new BussinessPedidos();
     const result: Array<IPedidos> = await pedido.readPedido();
-    response.status(200).json({ serverResponse: result });
+    res.status(200).json({ serverResponse: result });
   }
-
-  public async updatePedido(request: Request, response: Response) {
+//--------------- Actualizar Pedido -------------------------
+  public async updatePedido(req: Request, res: Response) {
     var ped: BussinessPedidos = new BussinessPedidos();
-    let id: string = request.params.id;
-    var params = request.body;
+    let id: string = req.params.id;
+    var params = req.body;
 
     try {
       if (params.ordenarP) {
@@ -69,31 +63,25 @@ class RoutesController {
               if (params.cuentaBancaria) {
                 params.cuentaBancaria = sha1(params.cuentaBancaria);
                 var result = await ped.updatePedido(id, params);
-                return response.status(201).json({ serverResponse: result });
+                return res.status(201).json({ serverResponse: result });
               } else {
-                return response
+                return res
                   .status(200)
                   .json({ serverResponse: "Es necesario cuenta bancaria" });
               }
             } else if (params.methodpay.toLowerCase() === "efectivo") {
               var result = await ped.updatePedido(id, params);
-              response.status(200).json({ serverResponse: result });
+              res.status(200).json({ serverResponse: result });
               return;
             } else {
-              return response.status(200).json({
-                serverResponse:
-                  "Introduzca valores correctos en el parametro methodpay",
-              });
+              return res.status(200).json({serverResponse:"Introduzca valores correctos en el metodo de pago"});
             }
           } else {
             var result = await ped.updatePedido(id, params);
-            return response.status(201).json({ serverResponse: result });
+            return res.status(201).json({ serverResponse: result });
           }
         } else {
-          return response.status(300).json({
-            serverResponse:
-              "Introduzca valores correctos en el parametro ordenarP",
-          });
+          return res.status(300).json({serverResponse:"Introduzca valores correctos al Ordenar"});
         }
       } else {
         if (params.methodpay) {
@@ -101,103 +89,89 @@ class RoutesController {
             if (params.cuentaBancaria) {
               params.cuentaBancaria = sha1(params.cuentaBancaria);
               var result = await ped.updatePedido(id, params);
-              response.status(201).json({ serverResponse: result });
+              res.status(201).json({ serverResponse: result });
               return;
             } else {
-              return response
-                .status(200)
-                .json({ serverResponse: "Es necesario cuenta bancaria" });
+              return res.status(200).json({ serverResponse: "Es necesario cuenta bancaria" });
             }
           } else if (params.methodpay.toLowerCase() === "efectivo") {
             var result = await ped.updatePedido(id, params);
-            response.status(200).json({ serverResponse: result });
+            res.status(200).json({ serverResponse: result });
             return;
           } else {
-            return response.status(200).json({
-              serverResponse:
-                "Introduzca valores correctos en el parametro methodpay",
-            });
+            return res.status(200).json({serverResponse:"Introduzca valores correctos en el metodo de pago"});
           }
         } else {
           var result = await ped.updatePedido(id, params);
-          return response.status(201).json({ serverResponse: result });
+          return res.status(201).json({ serverResponse: result });
         }
       }
     } catch (err) {
-      return response.status(300).json({ serverResponse: err });
+      return res.status(300).json({ serverResponse: err });
     }
   }
-
-  public async deletePedido(request: Request, response: Response) {
+// ----------------- Eliminar Pedido ---------------------
+  public async deletePedido(req: Request, res: Response) {
     var pedido: BussinessPedidos = new BussinessPedidos();
     try {
-      let id: string = request.params.id;
+      let id: string = req.params.id;
       let result = await pedido.deletePedido(id);
       if (result != null) {
-        response.status(200).json({ serverResponse: result });
+        res.status(200).json({ serverResponse: result });
         return;
       } else {
-        return response.status(300).json({
-          serverResponse:
-            "No se puede eliminar porque paso el limite de tiempo",
-        });
+        return res.status(300).json({serverResponse:
+            "No se puede eliminar despues del limite de tiempo"});
       }
     } catch (err) {
-      return response.status(200).json({ serverResponse: err });
+      return res.status(200).json({ serverResponse: err });
     }
   }
-
-  public async addProduct(request: Request, response: Response) {
-    let idPedido: string = request.params.id;
-    let Cant = request.params.cant;
-    let idPro = request.body.idPro;
+//---------------- Agregar Producto ---------------
+  public async addProduct(req: Request, res: Response) {
+    let idPedido: string = req.params.id;
+    let Cant = req.params.cant;
+    let idPro = req.body.idPro;
 
     if (idPedido == null && idPro == null && Cant == null) {
-      response.status(300).json({
-        serverResponse:
-          "No se definio id de pedido ni el id del producto, ni la cantidad",
-      });
+      res.status(300).json({ serverResponse:"No se definieron los id del pedido , producto, cantidad"});
       return;
     }
     try {
       var pedido: BussinessPedidos = new BussinessPedidos();
       var result = await pedido.addProduct(idPedido, idPro, parseInt(Cant));
       if (result == null) {
-        response.status(300).json({
-          serverResponse:
-            "El pedido o producto no existen o la cantidad definida no es correcta",
-        });
+        res.status(300).json({serverResponse:"El existe el pedido o producto o la cantidad esta incorrecta"});
         return;
       }
-      return response.status(200).json({ serverResponse: result });
+      return res.status(200).json({ serverResponse: result });
     } catch (err) {
-      return response.status(200).json({ serverResponse: err });
+      return res.status(200).json({ serverResponse: err });
     }
   }
-
-  public async updateProductPedido(request: Request, response: Response) {
+// -------------- Actualizar el Producto del Pedido -----------------
+  public async updateProductPedido(req: Request, res: Response) {
     let pedido: BussinessPedidos = new BussinessPedidos();
     try {
-      let idPe: string = request.params.id;
-      let idPro: string = request.body.idPro;
-      let Can: string = request.body.Cantidad;
-      //console.log("aquii" + idPe + " " + idPro + " " + Can);
+      let idPe: string = req.params.id;
+      let idPro: string = req.body.idPro;
+      let Can: string = req.body.Cantidad;
       let result = await pedido.updateProductPedido(idPe, idPro, parseInt(Can));
-      return response.status(200).json({ serverResponse: result });
+      return res.status(200).json({ serverResponse: result });
     } catch (err) {
-      return response.status(200).json({ serverResponse: err });
+      return res.status(200).json({ serverResponse: err });
     }
   }
-
-  public async removeProduct(request: Request, response: Response) {
+//------------------- Remover Producto ----------------------
+  public async removeProduct(req: Request, res: Response) {
     let pedido: BussinessPedidos = new BussinessPedidos();
     try {
-      let idPe: string = request.params.id;
-      let idPro: string = request.body.idPro;
+      let idPe: string = req.params.id;
+      let idPro: string = req.body.idPro;
       let result = await pedido.removeProducts(idPe, idPro);
-      return response.status(200).json({ serverResponse: result });
+      return res.status(200).json({ serverResponse: result });
     } catch (err) {
-      return response.status(200).json({ serverResponse: err });
+      return res.status(200).json({ serverResponse: err });
     }
   }
 }

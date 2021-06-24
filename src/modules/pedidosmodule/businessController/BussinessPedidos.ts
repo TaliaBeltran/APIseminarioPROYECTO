@@ -6,30 +6,21 @@ import UserModel from "../../usermodule/models/Users";
 import { validarEliminacionPedido } from "../validation";
 
 class BussinessPedidos {
-  constructor() {}
-
+  constructor() {
+    
+  }
+//----------------Leer Pedido -------------------------
   public async readPedido(): Promise<Array<IPedidos>>;
   public async readPedido(id: string): Promise<IPedidos>;
-  public async readPedido(
-    query: any,
-    skip: number,
-    limit: number
-  ): Promise<Array<IPedidos>>;
-
-  public async readPedido(
-    params1?: string | any,
-    params2?: number,
-    params3?: number
-  ): Promise<Array<IPedidos> | IPedidos> {
+  public async readPedido( query: any, skip: number, limit: number): Promise<Array<IPedidos>>;
+  public async readPedido( params1?: string | any, params2?: number, params3?: number): Promise<Array<IPedidos> | IPedidos> {
     if (params1 && typeof params1 == "string") {
       var result: IPedidos = await PedidoModel.findOne({ _id: params1 });
       return result;
     } else if (params1) {
       let skip = params2 ? params2 : 0;
       let limit = params3 ? params3 : 1;
-      let listUser: Array<IPedidos> = await PedidoModel.find(params1)
-        .skip(skip)
-        .limit(limit);
+      let listUser: Array<IPedidos> = await PedidoModel.find(params1).skip(skip).limit(limit);
       return listUser;
     } else {
       let listUser: Array<IPedidos> = await PedidoModel.find();
@@ -37,44 +28,42 @@ class BussinessPedidos {
     }
   }
 
+  //---------------- Agregar Pedido -------------------------
   public async addPedidos(pedidos: IPedidos) {
     try {
       let pedidoDb = new PedidoModel(pedidos);
       let result = await pedidoDb.save();
       return result;
     } catch (err) {
-      //console.log(err);
       return err;
     }
   }
-
+//----------------Actualizar Pedido -------------------------
   public async updatePedido(id: string, user: any) {
     let result = await PedidoModel.update({ _id: id }, { $set: user });
-    //console.log("aqui");
     return result;
   }
-  public async deletePedido(id: string) {
+  //----------------Eliminar Pedido -------------------------
+  public async deletePedido(idP: string) {
     try {
-      var pedido: IPedidos = await PedidoModel.findOne({ _id: id });
+      var pedido: IPedidos = await PedidoModel.findOne({ _id: idP });
       if (pedido != null) {
         if (validarEliminacionPedido(pedido.registerdate)) {
           console.log(validarEliminacionPedido(pedido.registerdate));
-          let result = await PedidoModel.remove({ _id: id });
+          let result = await PedidoModel.remove({ _id: idP});
           return result;
         } else {
           return null;
         }
       } else {
         return null;
-        /*response
-          .status(300)
-          .json({ serverResponse: "No existe el pedido" });*/
       }
     } catch (err) {
       return response.status(300).json({ serverResponse: err });
     }
   }
 
+  //----------------Agregar Producto -------------------------
   public async addProduct(idPed: string, IdPro: string, Cant: number) {
     let pedido = await PedidoModel.findOne({ _id: idPed });
     if (pedido != null) {
@@ -92,17 +81,12 @@ class BussinessPedidos {
               registerdate: new Date(),
             };
             pedido.products.push(SimpleProducts);
-
-            return await pedido.save(); //si hace falta aqui aumentar que cada vez que se selecciona un producto para un pedido su stock baje en uno
+            return await pedido.save(); 
           } else {
-            return response
-              .status(300)
-              .json({ serverResponse: "La cantidad no debe superar al stock" });
+            return response.status(300).json({ serverResponse: "Cantidad Limitada" });
           }
         } catch (err) {
-          return response
-            .status(300)
-            .json({ serverResponse: "Error al añadir producto" });
+          return response.status(300).json({ serverResponse: "Error  producto a;adido" });
         }
       }
       return null;
@@ -110,26 +94,21 @@ class BussinessPedidos {
     return null;
   }
 
-  public async updateProductPedido(
-    idPed: string,
-    idProd: string,
-    cant: number
+  //----------------Actualizar el Producto Pedido -------------------------
+  public async updateProductPedido(idPed: string, idProd: string,cant: number
   ) {
     let pedido = await PedidoModel.findOne({ _id: idPed });
 
     if (pedido != null && cant != null && !isNaN(cant)) {
       let newproducts: Array<ISimpleProducts> = pedido.products.filter(
         (item: ISimpleProducts) => {
-          //console.log(item.id + "   " + idProd);
           if (item.id.toString() == idProd.toString()) {
-            //si no utilizo el toString() no funciona...esta raro
             return true;
           }
 
           return false;
         }
       );
-      //console.log(newproducts[0]);
       if (newproducts.length == 1) {
         newproducts[0].cantidad = cant;
         newproducts[0].registerdate = new Date();
@@ -137,10 +116,8 @@ class BussinessPedidos {
         let oldproducts: Array<ISimpleProducts> = pedido.products.filter(
           (item: ISimpleProducts) => {
             if (item.id.toString() == idProd.toString()) {
-              //si no utilizo el toString() no funciona...esta raro
               return false;
             }
-
             return true;
           }
         );
@@ -159,7 +136,7 @@ class BussinessPedidos {
     }
     return null;
   }
-
+//----------------Remover Productos -------------------------
   public async removeProducts(idPed: string, idProd: string) {
     let pedido = await PedidoModel.findOne({ _id: idPed });
     var product = await ProductsModel.findOne({ _id: idProd });
@@ -181,7 +158,7 @@ class BussinessPedidos {
     }
     return null;
   }
-
+//---------------- Agregar Recibo -------------------------
   public async addRecibo(idUs: string, idCli: string, idPed: string) {
     let pedido = await PedidoModel.findOne({ _id: idPed });
     let cliente = await ClientsModel.findOne({ _id: idCli });
