@@ -10,27 +10,15 @@ import sha1 from "sha1";
 
 class RoutesControllerP {
   //------------- Crear Producto --------------
+  
   public async createProduct(req: Request, res: Response) {
     var product: BussinessProducts = new BussinessProducts();
+    let ProductD: string = req.params.ProductD;
     try {
-      var productData = req.body;
-      var ProductD: IProducts = productData;
-      if (
-        validacion(ProductD.name) && isValueOk(ProductD.stock) && isValueOk(ProductD.price)
-      ) {
-        if (ProductD.ofert != null) {
-          if (!isValueOk(ProductD.ofert)) {
-            return res.status(300).json({
-              serverResponse: "Oferta invalida",
-            });
-          }
-        }
-        let result = await product.addProduct(ProductD);
+      
+        let result = await product.readProduct(ProductD); // MODIFICADO___ quitamos createProduc xk salia  rror
         res.status(201).json({ serverResponse: result });
-        return;
-      } else {
-        return res.status(300).json({serverResponse: "Verifique los valores insertados"});
-      }
+       
     } catch (err) {
       return res.status(300).json({ serverResponse: "Error" });
     }
@@ -129,7 +117,7 @@ class RoutesControllerP {
     var subidas: number = 0;
     var nosubidas: number = 0;
     function getFileExtension(filename: string) {
-      return /[.]/.exec(filename) ? /[^.]+$/.exec(filename)[0] : undefined; //verificamos su extensión
+      return /[.]/.exec(filename) ? /[^.]+$/.exec(filename)[0] : undefined; 
     }
     for (var i = 0; i < key.length; i++) {
       var file: any = files[key[i]];

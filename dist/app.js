@@ -37,7 +37,7 @@ class App {
         this.initApp();
     }
     connectDatabase() {
-        let host = "mongodb://172.20.0.3:27017";
+        let host = "mongodb://172.27.0.2:27017";
         let database = process.env.DATABASE || "seminario";
         let connectionString = `${host}/${database}`;
         mongoose_1.default.connect(connectionString, {
@@ -50,7 +50,7 @@ class App {
             console.log(err);
         });
         mongoose_1.default.connection.on("open", () => {
-            console.log("---- DATABASE connection success! ----");
+            console.log("* ------- DATABASE CONNECTION SUCCESS !!! -------------*");
         });
         this.mongooseClient = mongoose_1.default;
     }

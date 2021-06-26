@@ -18,7 +18,7 @@ class Routes {
       .post(this.routesController.refreshToken);
     app
       .route(`${this.routeparent}/users`)
-      .post(jsonwebtokenSecurity, this.routesController.createUsers);
+      .post(this.routesController.createUsers);
 
     app
       .route(`${this.routeparent}/users`)
@@ -47,13 +47,13 @@ class Routes {
     //**--ROLES ROUTES--------------------------------------------------------------------------------------- */
     app
       .route(`${this.routeparent}/roles`)
-      .post(jsonwebtokenSecurity, this.routesController.createRol);
+      .post( this.routesController.createRol);
     app
       .route(`${this.routeparent}/roles`)
-      .get(jsonwebtokenSecurity, this.routesController.getRol);
+      .get(this.routesController.getRol);
     app
       .route(`${this.routeparent}/roles/:id`)
-      .delete(jsonwebtokenSecurity, this.routesController.removeRol);
+      .delete( this.routesController.removeRol);
 
     //--------AÑADIR O ELIMINAR CLIENTES A USUARIOS -----------
     app

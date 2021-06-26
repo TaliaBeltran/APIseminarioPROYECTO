@@ -1,6 +1,6 @@
 import mongoose, { Schema, Document } from "mongoose";
 import RolesModel, { IRoles } from "./Roles";
-import validator from "validator"; //instalamos validator para validar correos y username
+import validator from "validator"; 
 import { IClients } from "../../clientsmodels/models/Clients";
 
 export interface ISimpleUser {

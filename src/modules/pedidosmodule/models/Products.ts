@@ -15,7 +15,6 @@ export interface IProducts extends Document {
   pathavathar: string;
   stock: number;
   price: number;
-  ofert: number;
   registerdate: Date;
 }
 
@@ -37,10 +36,6 @@ const productsSchema: Schema = new Schema({
   price: { 
     type: Number, 
     required: true,
-   },
-  ofert: { 
-    type: Number, 
-    required: true, 
    },
   registerdate: { 
     type: Date, 

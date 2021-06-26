@@ -19,8 +19,8 @@ class Routes {
 
     //-------------RUtas del Pedido -----------------------
     app
-      .route(`${this.routeparent}/pedidos`)
-      .post(this.routesController.createPedido);// Crear Pedido
+    .route(`${this.routeparent}/pedidos`)
+    .post(this.routesController.createPedido);// Crear Pedido
 
     app
       .route(`${this.routeparent}/pedidos`)
@@ -48,11 +48,11 @@ class Routes {
 
     //-----------Rutas del Productos ------------------------
     app
-      .route(`${this.routeparent}/producto/`)
+      .route(`${this.routeparent}/producto`)
       .post(this.routesControllerP.createProduct);// Crear Producto
 
     app
-      .route(`${this.routeparent}/producto/`)
+      .route(`${this.routeparent}/producto`)
       .get(this.routesControllerP.getProduct);// Obtener Producto
 
     app
