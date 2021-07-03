@@ -39,21 +39,20 @@ class RoutesController {
     if (result.length == 1) {
       var loginUser: IUser = result[0];
       var token: string = jsonwebtoken.sign(
-        { id: loginUser._id, email: loginUser.email },
-        "secret",
+        { id: loginUser._id, email: loginUser.email },     "secret",
         {
-          expiresIn: 60 * 60 * 24, // expires in 24 hours
+          expiresIn: 60 * 60 * 24, // expira en 24 horas
         }
       );
       var refreshtoken: string = jsonwebtoken.sign(
-        { id: loginUser._id, email: loginUser.email },
-        "secret123",
+        { id: loginUser._id, email: loginUser.email },     "secret123",
         {
-          expiresIn: 60 * 60 * 24, // expires in 24 hours
+          expiresIn: 60 * 60 * 24, 
         }
       );
       response.status(200).json({
         serverResponse: {
+          _id: loginUser.id,
           tipo: loginUser.tipo,
           username: loginUser.username,
           token,
@@ -87,7 +86,7 @@ class RoutesController {
       { id: userData._id, email: userData.email },
       "secret",
       {
-        expiresIn: 60 * 60 * 24, // expires in 24 hours
+        expiresIn: 60 * 60 * 24, // expira en 24 horas
       }
     );
     response.json({ serverResponse: "Todo Ok", token });
@@ -120,6 +119,14 @@ class RoutesController {
     const result: Array<IUser> = await user.readUsers();
     response.status(200).json({ serverResponse: result });
   }
+
+  public async getOnlyUsers(request: Request, response: Response) {
+    var user: BusinessUser = new BusinessUser();
+    let id: string = request.params.id;
+    const result: IUser = await user.readOnlyUsers(id);
+    response.status(200).json({ serverResponse: result });
+  }
+
   public async updateUsers(request: Request, response: Response) {
     var user: BusinessUser = new BusinessUser();
     let id: string = request.params.id;
@@ -173,7 +180,7 @@ class RoutesController {
     if (result == null) {
       response
         .status(300)
-        .json({ serverResponse: "El rol o usuario no existen" });
+        .json({ serverResponse: "El rol o usuario no existen o y fue asigndo" });
       return;
     }
     response.status(200).json({ serverResponse: result });

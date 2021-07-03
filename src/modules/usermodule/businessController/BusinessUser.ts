@@ -49,6 +49,13 @@ class BusinessUser {
     }
   }
 
+  public async readOnlyUsers(idUs: string) {
+    let users = await UsersModel.findOne({ _id: idUs });
+    if (users != null) {
+      return users;
+    }
+    return null;
+  }
   //---ACTUALIZAR USUARIOS
   public async updateUsers(id: string, user: any) {
     let result = await UsersModel.update({ _id: id }, { $set: user });
@@ -67,15 +74,24 @@ class BusinessUser {
     if (user != null) {
       var rol = await RolesModel.findOne({ _id: idRol });
       if (rol != null) {
-        user.roles.push(rol);
-        return await user.save();
+        var CheckRol: Array<IRoles> = user.roles.filter((item) => {
+          if (rol._id.toString() == item._id.toString()) {
+            return true;
+          }
+          return false;
+        });
+        if (CheckRol.length == 0) {
+          user.roles.push(rol);
+          return await user.save();
+        }
+        return null;
       }
       return null;
     }
     return null;
   }
 
-  //---ELIMINAR ROL L USUARIO
+  //---ELIMINAR ROL AL USUARIO
   public async removeRol(idUs: string, idRol: string) {
     let user = await UsersModel.findOne({ _id: idUs });
     var rol = await RolesModel.findOne({ _id: idRol });

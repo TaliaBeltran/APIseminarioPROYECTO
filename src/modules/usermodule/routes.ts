@@ -22,14 +22,14 @@ class Routes {
 
     app
       .route(`${this.routeparent}/users`)
-      .get(jsonwebtokenSecurity, this.routesController.getUsers);
+      .get(this.routesController.getUsers);
 
     app
       .route(`${this.routeparent}/users/:id`)
       .put(this.routesController.updateUsers);
     app
       .route(`${this.routeparent}/users/:id`)
-      .delete(jsonwebtokenSecurity, this.routesController.removeUsers);
+      .delete(this.routesController.removeUsers);
     app
       .route(`${this.routeparent}/uploadportrait/:id`)
       .post(this.routesController.uploadPortrait);
@@ -39,10 +39,10 @@ class Routes {
 
     app
       .route(`${this.routeparent}/addrol/:id`)
-      .put(jsonwebtokenSecurity, this.routesController.addRol);
+      .put(this.routesController.addRol);
     app
       .route(`${this.routeparent}/removerol/:id`)
-      .put(jsonwebtokenSecurity, this.routesController.removeUserRol);
+      .put(this.routesController.removeUserRol);
 
     //**--ROLES ROUTES--------------------------------------------------------------------------------------- */
     app

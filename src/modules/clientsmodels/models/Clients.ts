@@ -1,6 +1,7 @@
 import mongoose, { Schema, Document } from "mongoose";
 import { IReunion } from "./Agenda";
 import { IPedidos } from "../../pedidosmodule/models/pedidos";
+
 export interface IClients extends Document {
   firtsname: string;
   lastname: string;
@@ -13,10 +14,10 @@ export interface IClients extends Document {
   zona: string;
   street: string; // calle y numero
   tipo: string; //TipoCLiente: mayorista, supermercado , off
-
   registerdate: Date;
   pedidos?: Array<IPedidos>;
   reunion?: Array<IReunion>;
+  idUser: string;
 }
 
 const clientsSchema: Schema = new Schema({
@@ -73,5 +74,6 @@ const clientsSchema: Schema = new Schema({
 
   pedidos: { type: Array },
   reunion: { type: Array },
+  idUser: { type: String, required: true },
 });
 export default mongoose.model<IClients>("Client", clientsSchema);

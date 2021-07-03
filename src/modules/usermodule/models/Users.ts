@@ -12,6 +12,7 @@ export interface ISimpleUser {
   roles?: Array<IRoles>;
   uriavatar?: string;
   pathavatar?: string;
+  clients?: Array<IClients>;
 }
 export interface IUser extends Document {
   username: string;

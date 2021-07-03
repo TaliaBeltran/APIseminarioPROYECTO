@@ -4,7 +4,7 @@ import BussinessReunion from "../businessController/BussinessReunion";
 import { IClients } from "../models/Clients";
 import { IReunion } from "../models/Agenda";
 import validator from "validator";
-import {validacion,validacionphone,validacionprob,validacionfecha,validaciónhora,} from "../validacion";
+import {validacion,validacionphone,validacionfecha,validacionprob,validaciónhora,} from "../validacion";
 import isEmpty from "is-empty";
 import path from "path";
 import sha1 from "sha1";
@@ -53,13 +53,13 @@ class RoutesController {
   public async getTypeClient(req: Request, res: Response) {
     let client: BussinessClient = new BussinessClient();
     let date: string = req.params.date;
+    let id: string = req.params.id;
+    console.log("principio " + id + " " + date + " finnnn");
     try {
-      let clientData: Array<IClients> | IClients = await client.getTypeClient(
-        date
-      );
+      let clientData: Array<IClients> | IClients = await client.getTypeClient(id, date);
       res.status(200).json({ serverResponse: clientData });
     } catch (err) {
-      return res.status(300).json({ serverResponse: err });
+      return res.status(300).json({ serverResponse:"Error"});
     }
   }
 /*

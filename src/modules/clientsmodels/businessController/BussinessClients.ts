@@ -1,5 +1,6 @@
 import ClientsModel, { IClients } from "../models/Clients";
 import PedidosModel, { IPedidos } from "../../pedidosmodule/models/pedidos";
+import UsersModel,{IUser, ISimpleUser} from "../../usermodule/models/Users";
 class BusinessClient {
   constructor() {
 
@@ -37,14 +38,22 @@ class BusinessClient {
   }
 
 // ------Obtener el Tipo de Cliente -------------
-  public async getTypeClient(tipo: string) {
-    let client = await ClientsModel.find({ tipo: tipo });
-    console.log(client);
-    if (client != null) {
-      return client;
+public async getTypeClient(idUs: string, tipo: string) {
+  let user = await UsersModel.find({ _id: idUs });
+  let client = await ClientsModel.find({ tipo: tipo });
+  console.log(client);
+  var result: Array<IClients> = client.filter((item: IClients) => {
+    //console.log(item.idUser + " " + idUs);
+    if (item.idUser.toString() == idUs.toString()) {
+      return true;
     }
-    return null;
+    return false;
+  });
+  console.log(result);
+  if (client != null) {
+    return client;
   }
+}
 /*/----- Obtener Nombres de  Clientes Regulares -------------
   public async getNamesClientR(name: string, tipo: string) {
     let regularexpresion: RegExp = new RegExp(name.toLowerCase(), "regular");
