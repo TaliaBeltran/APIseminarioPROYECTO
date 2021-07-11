@@ -10,26 +10,23 @@ import sha1 from "sha1";
 
 class RoutesControllerP {
   //------------- Crear Producto --------------
-  
-  public async createProduct(req: Request, res: Response) {
+
+  public async createProduct(request: Request, response: Response) {
     var product: BussinessProducts = new BussinessProducts();
-    let ProductD: string = req.params.ProductD;
-    try {
-      
-        let result = await product.readProduct(ProductD); // MODIFICADO___ quitamos createProduc xk salia  rror
-        res.status(201).json({ serverResponse: result });
-       
-    } catch (err) {
-      return res.status(300).json({ serverResponse: "Error" });
-    }
+    var productData = request.body;
+    var ProductD: IProducts = productData;
+
+    let result = await product.addProduct(ProductD);
+    response.status(201).json({ serverResponse: result });
   }
-// ----------------------- Obtener Producto ------------------
+
+  // ----------------------- Obtener Producto ------------------
   public async getProduct(req: Request, res: Response) {
     var products: BussinessProducts = new BussinessProducts();
     const result: Array<IProducts> = await products.readProduct();
     res.status(200).json({ serverResponse: result });
   }
-//----------------- Actualizar Producto ------------------------
+  //----------------- Actualizar Producto ------------------------
   public async updateProduct(req: Request, res: Response) {
     var pro: BussinessProducts = new BussinessProducts();
     let id: string = req.params.id;
@@ -37,22 +34,30 @@ class RoutesControllerP {
     try {
       if (params.name) {
         if (!validacion(params.name)) {
-          return res.status(300).json({ serverResponse: "Error en validacion nombre" });
+          return res
+            .status(300)
+            .json({ serverResponse: "Error en validacion nombre" });
         }
       }
       if (params.stock) {
         if (!validacion(params.stock)) {
-          return res.status(300).json({ serverResponse: "Error en validacion stock" });
+          return res
+            .status(300)
+            .json({ serverResponse: "Error en validacion stock" });
         }
       }
       if (params.price) {
         if (!validacion(params.price)) {
-          return res.status(300).json({ serverResponse: "Error en validacion precio" });
+          return res
+            .status(300)
+            .json({ serverResponse: "Error en validacion precio" });
         }
       }
       if (params.ofert) {
         if (!validacion(params.ofert)) {
-          return res.status(300).json({ serverResponse: "Error en validacion oferta" });
+          return res
+            .status(300)
+            .json({ serverResponse: "Error en validacion oferta" });
         }
       }
       var result = await pro.updateProduct(id, params);
@@ -61,7 +66,7 @@ class RoutesControllerP {
       return res.status(300).json({ serverResponse: "Error" });
     }
   }
-//--------------- Eliminar Producto -----------------------
+  //--------------- Eliminar Producto -----------------------
   public async deleteProduct(req: Request, res: Response) {
     var pro: BussinessProducts = new BussinessProducts();
     try {
@@ -73,12 +78,14 @@ class RoutesControllerP {
       return res.status(200).json({ serverResponse: "Error" });
     }
   }
-//--------------------------Actualizar Imagen ------------------
+  //--------------------------Actualizar Imagen ------------------
   public async uploadimage(req: Request, res: Response) {
     var id: string = req.params.id;
     try {
       if (!id) {
-        res.status(300).json({ serverResponse: "El id es necesario para subir foto" });
+        res
+          .status(300)
+          .json({ serverResponse: "El id es necesario para subir foto" });
         return;
       }
       var product: BussinessProducts = new BussinessProducts();
@@ -93,7 +100,7 @@ class RoutesControllerP {
         .json({ serverResponse: "Hubo algun error intente de nuevo" });
     }
     if (isEmpty(req.files)) {
-      res.status(300) .json({ serverResponse: "No existe archivo adjunto" });
+      res.status(300).json({ serverResponse: "No existe archivo adjunto" });
       return;
     }
     var dir = `${__dirname}/../../../../avatarproductfiles`;
@@ -117,12 +124,13 @@ class RoutesControllerP {
     var subidas: number = 0;
     var nosubidas: number = 0;
     function getFileExtension(filename: string) {
-      return /[.]/.exec(filename) ? /[^.]+$/.exec(filename)[0] : undefined; 
+      return /[.]/.exec(filename) ? /[^.]+$/.exec(filename)[0] : undefined;
     }
     for (var i = 0; i < key.length; i++) {
       var file: any = files[key[i]];
       if (
-        getFileExtension(file.name) === "jpg" || getFileExtension(file.name) === "png" ||
+        getFileExtension(file.name) === "jpg" ||
+        getFileExtension(file.name) === "png" ||
         getFileExtension(file.name) === "jpeg"
       ) {
         var filehash: string = sha1(new Date().toString()).substr(0, 7);
@@ -142,10 +150,14 @@ class RoutesControllerP {
         nosubidas += 1;
       }
     }
-    return res.status(200).json({ serverResponse:
-        "Imagen subida: " + subidas + ", imagen no subida: " + nosubidas});
+    return res
+      .status(200)
+      .json({
+        serverResponse:
+          "Imagen subida: " + subidas + ", imagen no subida: " + nosubidas,
+      });
   }
-//---------------- Obtener el Imagen de Producto ------------------------
+  //---------------- Obtener el Imagen de Producto ------------------------
   public async getimageProduct(req: Request, res: Response) {
     var id: string = req.params.id;
     try {
@@ -158,7 +170,9 @@ class RoutesControllerP {
       var productData: IProducts = await product.readProduct(id);
 
       if (!productData) {
-        res.status(300) .json({ serverResponse: "Error del producto no existe" });
+        res
+          .status(300)
+          .json({ serverResponse: "Error del producto no existe" });
         return;
       }
     } catch (err) {

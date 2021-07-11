@@ -4,7 +4,13 @@ import BussinessReunion from "../businessController/BussinessReunion";
 import { IClients } from "../models/Clients";
 import { IReunion } from "../models/Agenda";
 import validator from "validator";
-import {validacion,validacionphone,validacionfecha,validacionprob,validaciónhora,} from "../validacion";
+import {
+  validacion,
+  validacionphone,
+  validacionfecha,
+  validacionprob,
+  validaciónhora,
+} from "../validacion";
 import isEmpty from "is-empty";
 import path from "path";
 import sha1 from "sha1";
@@ -16,29 +22,11 @@ class RoutesController {
     var client: BussinessClient = new BussinessClient();
     var clientData = req.body;
     var ClientD: IClients = clientData;
-    try {
-      if (
-        validator.isEmail(ClientD.email) && validacion(ClientD.firtsname) && validacion(ClientD.lastname) &&
-        validacionphone(ClientD.telephone) && validacionprob(ClientD.probability)
-      ) {
-        ClientD["registerdate"] = new Date();
-        let result = await client.addClient(ClientD);
-        res.status(201).json({ serverResponse: result });
-        return;
-      } else {
-        return res.status(404).json({
-          serverResponse: "Intruduzca parametros correctos",
-        });
-      }
-    } catch (err) {
-      console.log(err);
-      return res.status(404).json({
-        serverResponse: "Introducir parametro",
-        err,
-      });
-    }
+    ClientD["registerdate"] = new Date();
+    let result = await client.addClient(ClientD);
+    res.status(201).json({ serverResponse: result });
   }
-// -------------- Mostrar Cliente -------------------
+  // -------------- Mostrar Cliente -------------------
   public async getClient(req: Request, res: Response) {
     let client: BussinessClient = new BussinessClient();
     try {
@@ -49,20 +37,23 @@ class RoutesController {
     }
   }
 
-// -------------- Mostrar el Tipo de Cliente -------------------
+  // -------------- Mostrar el Tipo de Cliente -------------------
   public async getTypeClient(req: Request, res: Response) {
     let client: BussinessClient = new BussinessClient();
     let date: string = req.params.date;
     let id: string = req.params.id;
     console.log("principio " + id + " " + date + " finnnn");
     try {
-      let clientData: Array<IClients> | IClients = await client.getTypeClient(id, date);
+      let clientData: Array<IClients> | IClients = await client.getTypeClient(
+        id,
+        date
+      );
       res.status(200).json({ serverResponse: clientData });
     } catch (err) {
-      return res.status(300).json({ serverResponse:"Error"});
+      return res.status(300).json({ serverResponse: "Error" });
     }
   }
-/*
+  /*
   public async getNameClientR(request: Request, response: Response) {
     let client: BussinessClient = new BussinessClient();
     let tipo: string = request.params.tipo;
@@ -85,7 +76,7 @@ class RoutesController {
   }
 */
 
-// -------------- Actualizar  Cliente -------------------
+  // -------------- Actualizar  Cliente -------------------
   public async updateClient(req: Request, res: Response) {
     var user: BussinessClient = new BussinessClient();
     let id: string = req.params.id;
@@ -110,7 +101,7 @@ class RoutesController {
       res.status(404).json({ serverResponse: err });
     }
   }
-// -------------- Subir Foto-------------------
+  // -------------- Subir Foto-------------------
   public async uploadPortrait(req: Request, res: Response) {
     var id: string = req.params.id;
     try {
@@ -121,7 +112,9 @@ class RoutesController {
       var client: BussinessClient = new BussinessClient();
       var clientToUpdate: IClients = await client.readClients(id);
       if (!clientToUpdate) {
-        res.status(300).json({ serverResponse: "El cliente no ha sido encontrado" });
+        res
+          .status(300)
+          .json({ serverResponse: "El cliente no ha sido encontrado" });
         return;
       }
     } catch (err) {
@@ -155,7 +148,8 @@ class RoutesController {
     for (var i = 0; i < key.length; i++) {
       var file: any = files[key[i]];
       if (
-        getFileExtension(file.name) === "jpg" || getFileExtension(file.name) === "png" ||
+        getFileExtension(file.name) === "jpg" ||
+        getFileExtension(file.name) === "png" ||
         getFileExtension(file.name) === "jpeg"
       ) {
         var filehash: string = sha1(new Date().toString()).substr(0, 7);
@@ -175,8 +169,13 @@ class RoutesController {
         nosubidas += 1;
       }
     }
-    return res.status(200).json({serverResponse:"Petición finalizada, se subido " + subidas + " imagenes y " +
-        nosubidas + " no se pudo subir porque no eran formato imagen",
+    return res.status(200).json({
+      serverResponse:
+        "Petición finalizada, se subido " +
+        subidas +
+        " imagenes y " +
+        nosubidas +
+        " no se pudo subir porque no eran formato imagen",
     });
   }
 
@@ -184,19 +183,24 @@ class RoutesController {
   public async clientgetportrait(req: Request, res: Response) {
     var id: string = req.params.id;
     try {
-      if (!id) {res.status(300).json({ serverResponse: "No se puedo encontrar el identificador" });
+      if (!id) {
+        res
+          .status(300)
+          .json({ serverResponse: "No se puedo encontrar el identificador" });
         return;
       }
 
       var client: BussinessClient = new BussinessClient();
       var clientData: IClients = await client.readClients(id);
-      if (!clientData) {res.status(300).json({ serverResponse: "Error no existe el cliente" });
+      if (!clientData) {
+        res.status(300).json({ serverResponse: "Error no existe el cliente" });
         return;
       }
     } catch (err) {
       return res.status(300).json({ serverResponse: "Error" });
     }
-    if (clientData.pathphoto == null) {res.status(300).json({ serverResponse: "No existe foto " });
+    if (clientData.pathphoto == null) {
+      res.status(300).json({ serverResponse: "No existe foto " });
       return;
     }
     res.sendFile(clientData.pathphoto);
@@ -207,12 +211,15 @@ class RoutesController {
     try {
       var horario = req.body;
       var date: IReunion = horario;
-      if (date.fecha != undefined || date.hora != undefined ||
-        date.fecha != null || date.hora != null
+      if (
+        date.fecha != undefined ||
+        date.hora != undefined ||
+        date.fecha != null ||
+        date.hora != null
       ) {
         if (validacionfecha(date.fecha) && validaciónhora(date.hora)) {
           var reunion: BussinessReunion = new BussinessReunion();
-          var dates: any = {fecha: date.fecha,hora: date.hora };
+          var dates: any = { fecha: date.fecha, hora: date.hora };
           let result = await reunion.createReunion(dates);
           res.status(201).json({ serverResponse: result });
           return;
@@ -249,8 +256,10 @@ class RoutesController {
       let day = date.getDate();
       let month = date.getMonth() + 1;
       let year = date.getFullYear();
-      if (month < 10) { date = `${day}-0${month}-${year}`;
-      } else { date = `${day}-${month}-${year}`;
+      if (month < 10) {
+        date = `${day}-0${month}-${year}`;
+      } else {
+        date = `${day}-${month}-${year}`;
       }
       function compare(fecha: string, fecha2: any) {
         var xMonth = fecha.substring(3, 5);
@@ -286,7 +295,7 @@ class RoutesController {
       return res.status(300).json({ serverResponse: err });
     }
   }
-// -------------- Actualizar Reunion -------------------
+  // -------------- Actualizar Reunion -------------------
   public async updateReunion(req: Request, res: Response) {
     var reunion: BussinessReunion = new BussinessReunion();
     let id: string = req.params.id;
@@ -318,14 +327,19 @@ class RoutesController {
     let idCl: string = req.params.id;
     let idReu = req.body.idReu;
     if (idCl == null && idReu == null) {
-      res.status(300).json({serverResponse: "Id del cliente,  id de la reunion no fueron ingresados"});
+      res.status(300).json({
+        serverResponse:
+          "Id del cliente,  id de la reunion no fueron ingresados",
+      });
       return;
     }
     try {
       var reunion: BussinessReunion = new BussinessReunion();
       var result = await reunion.addReu(idCl, idReu);
       if (result == null) {
-        res.status(300).json({ serverResponse: "La reunion o cliente no existen" });
+        res
+          .status(300)
+          .json({ serverResponse: "La reunion o cliente no existen" });
         return;
       } else {
         return res.status(200).json({ serverResponse: result });
@@ -349,12 +363,14 @@ class RoutesController {
     }
   }
 
-    //------------ Agregar Pedido Cliente ---------
+  //------------ Agregar Pedido Cliente ---------
   public async addPedidoClients(req: Request, res: Response) {
     let idCl: string = req.params.id;
     let idPed = req.body.idPed;
-    if (idCl == null && idPed == null) { res.status(300).json({
-        serverResponse: "Id del cliente,  id de la reunion no fueron ingresados",
+    if (idCl == null && idPed == null) {
+      res.status(300).json({
+        serverResponse:
+          "Id del cliente,  id de la reunion no fueron ingresados",
       });
       return;
     }
@@ -362,7 +378,9 @@ class RoutesController {
       var pedidoclient: BussinessClient = new BussinessClient();
       var result = await pedidoclient.addPed(idCl, idPed);
       if (result == null) {
-        res.status(300).json({ serverResponse: "El pedido o cliente no existen" });
+        res
+          .status(300)
+          .json({ serverResponse: "El pedido o cliente no existen" });
         return;
       } else {
         return res.status(200).json({ serverResponse: result });
@@ -371,7 +389,7 @@ class RoutesController {
       return res.status(300).json({ serverResponse: err });
     }
   }
-//------------- Remove Pedido de Cliente ----------------------
+  //------------- Remove Pedido de Cliente ----------------------
   public async removePedidoClients(req: Request, res: Response) {
     let client: BussinessClient = new BussinessClient();
     let idCl: string = req.params.id;
@@ -379,7 +397,7 @@ class RoutesController {
     try {
       let result = await client.removePed(idCl, idPed);
 
-      return res.status(200).json({ serverResponse: result }); 
+      return res.status(200).json({ serverResponse: result });
     } catch (err) {
       return res.status(200).json({ serverResponse: err });
     }

@@ -6,44 +6,44 @@ export interface IPedidos extends Document {
   state: string;
   products: Array<ISimpleProducts>;
   registerdate: Date;
-  ordenarP: string;
+  //ordenarP: string;
   methodpay: string;
   cuentaBancaria?: string;
   total: number;
-  Recibo: Array<IRecibo>;
+  Recibo?: Array<IRecibo>;
 }
 const pedidosSchema: Schema = new Schema({
-  state: { 
-    type: String, 
-    required: true, 
-    default: "Pedido Sin Entregar",
-   },
-  products: { 
-    type: Array,
-   },
-  registerdate: { 
-    type: Date, 
-    required: true, 
-    default: Date.now,
-   },
-  ordenarP: { 
-    type: String, 
-    required: true, 
-    default: "OFF",
-   },
-  methodpay: { 
-    type: String, 
-    required: true,
-   },
-  cuentaBancaria: { 
+  state: {
     type: String,
-   },
-  total: { 
-    type: Number, 
-    default: 0,
-   },
-  Recibo: { 
+    required: true,
+    default: "Pedido Sin Entregar",
+  },
+  products: {
     type: Array,
-   },
+  },
+  registerdate: {
+    type: Date,
+    required: true,
+    default: Date.now,
+  },
+  /*ordenarP: {
+    type: String,
+    required: true,
+    default: "OFF",
+  },*/
+  methodpay: {
+    type: String,
+    required: true,
+  },
+  cuentaBancaria: {
+    type: String,
+  },
+  total: {
+    type: Number,
+    default: 0,
+  },
+  Recibo: {
+    type: Array,
+  },
 });
 export default mongoose.model<IPedidos>("Pedido", pedidosSchema);

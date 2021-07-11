@@ -17,19 +17,19 @@ class Routes {
 
     app
       .route(`${this.routeparent}/client`)
-      .get(jsonwebtokenSecurity,this.routesController.getClient);// Mostrar Clientes
+      .get(this.routesController.getClient); // Mostrar Clientes
 
     app
-      .route(`${this.routeparent}/client/tipo/:date/:id`) 
-      .get(this.routesController.getTypeClient);//Buscar el tipo de cliente 
-/*
+      .route(`${this.routeparent}/client/tipo/:date/:id`)
+      .get(this.routesController.getTypeClient); //Buscar el tipo de cliente
+    /*
     app
       .route(`${this.routeparent}/client/:tipo/:name`) //buscar por nombre de cliente regular
       .get(this.routesController.getNameClientR);*/
 
     app
       .route(`${this.routeparent}/client/:id`)
-      .put(this.routesController.updateClient);// Actualoizar Cliente
+      .put(this.routesController.updateClient); // Actualoizar Cliente
     app
       .route(`${this.routeparent}/client/:id`)
       .delete(this.routesController.removeClients); // Eliminar Cliente
@@ -52,7 +52,7 @@ class Routes {
 
     app
       .route(`${this.routeparent}/agendar/pendientes`)
-      .get(this.routesController.getreunionPendientes);// Mostrar Reuniones Pendientes
+      .get(this.routesController.getreunionPendientes); // Mostrar Reuniones Pendientes
 
     app
       .route(`${this.routeparent}/agendar/:id`)
@@ -68,7 +68,7 @@ class Routes {
 
     app
       .route(`${this.routeparent}/removereunion/:id`)
-      .delete(this.routesController.removeReunion);//  Remover Reunion
+      .delete(this.routesController.removeReunion); //  Remover Reunion
 
     //--------------- Pedidos--
     app

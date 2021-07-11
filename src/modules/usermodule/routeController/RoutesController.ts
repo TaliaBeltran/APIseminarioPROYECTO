@@ -39,15 +39,17 @@ class RoutesController {
     if (result.length == 1) {
       var loginUser: IUser = result[0];
       var token: string = jsonwebtoken.sign(
-        { id: loginUser._id, email: loginUser.email },     "secret",
+        { id: loginUser._id, email: loginUser.email },
+        "secret",
         {
           expiresIn: 60 * 60 * 24, // expira en 24 horas
         }
       );
       var refreshtoken: string = jsonwebtoken.sign(
-        { id: loginUser._id, email: loginUser.email },     "secret123",
+        { id: loginUser._id, email: loginUser.email },
+        "secret123",
         {
-          expiresIn: 60 * 60 * 24, 
+          expiresIn: 60 * 60 * 24,
         }
       );
       response.status(200).json({
@@ -92,28 +94,22 @@ class RoutesController {
     response.json({ serverResponse: "Todo Ok", token });
   }
 
+  // -----------CREAR USUARIO--------------
+
   public async createUsers(request: Request, response: Response) {
     var user: BusinessUser = new BusinessUser();
     var userData = request.body;
-    var USerD: IUser = userData;
 
-    if (
-      validator.isEmail(request.body.email) &&
-      validacion(request.body.username)
-    ) {
-      userData["registerdate"] = new Date();
-      userData["password"] = sha1(userData["password"]);
+    var passwordGenerado: string = user.passwordGenerate();
+    userData["passwordT"] = passwordGenerado;
+    console.log(passwordGenerado);
+    userData["registerdate"] = new Date();
+    userData["password"] = sha1(userData["password"]);
 
-      let result = await user.addUsers(userData);
-      response.status(201).json({ serverResponse: result });
-      return;
-    } else {
-      return response.status(201).json({
-        serverResponse:
-          /*result*/ "Intruduzca email y nombre de usuario correcto",
-      });
-    }
+    let result = await user.addUsers(userData);
+    response.status(201).json({ serverResponse: result });
   }
+
   public async getUsers(request: Request, response: Response) {
     var user: BusinessUser = new BusinessUser();
     const result: Array<IUser> = await user.readUsers();
@@ -178,9 +174,9 @@ class RoutesController {
     var user: BusinessUser = new BusinessUser();
     var result = await user.addRol(idUs, idRol);
     if (result == null) {
-      response
-        .status(300)
-        .json({ serverResponse: "El rol o usuario no existen o y fue asigndo" });
+      response.status(300).json({
+        serverResponse: "El rol o usuario no existen o y fue asigndo",
+      });
       return;
     }
     response.status(200).json({ serverResponse: result });

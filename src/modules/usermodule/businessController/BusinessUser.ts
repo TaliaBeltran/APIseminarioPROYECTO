@@ -111,6 +111,12 @@ class BusinessUser {
     }
     return null;
   }
+  // ------GENERADOR DE CONTRASEÑAS-------------
+  public passwordGenerate() {
+    var contraseña: string = "contraseña generada";
+    return contraseña;
+  }
+  //-----------------------
 
   public async addClient(idUs: string, idCl: string) {
     let user = await UsersModel.findOne({ _id: idUs });
