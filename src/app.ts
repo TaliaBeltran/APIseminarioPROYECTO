@@ -27,7 +27,9 @@ class App {
       console.log(err);
     });
     mongoose.connection.on("open", () => {
-      console.log("* ------- DATABASE CONNECTION SUCCESS !!! -------------*");
+      console.log(
+        "* ------- DATABASE CONNECTION SUCCESS !!! ----------------*"
+      );
     });
     this.mongooseClient = mongoose;
   }
