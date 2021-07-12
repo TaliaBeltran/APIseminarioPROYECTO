@@ -6,11 +6,13 @@ export interface IPedidos extends Document {
   state: string;
   products: Array<ISimpleProducts>;
   registerdate: Date;
-  //ordenarP: string;
   methodpay: string;
   cuentaBancaria?: string;
   total: number;
   Recibo?: Array<IRecibo>;
+  idClient: string;
+  FechaEntrega: String;
+  horaEntrega: String;
 }
 const pedidosSchema: Schema = new Schema({
   state: {
@@ -45,5 +47,8 @@ const pedidosSchema: Schema = new Schema({
   Recibo: {
     type: Array,
   },
+  idClient: { type: String },
+  FechaEntrega: { type: String },
+  horaEntrega: { type: String },
 });
 export default mongoose.model<IPedidos>("Pedido", pedidosSchema);

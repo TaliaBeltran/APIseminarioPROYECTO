@@ -22,10 +22,10 @@ class Routes {
     app
       .route(`${this.routeparent}/client/tipo/:date/:id`)
       .get(this.routesController.getTypeClient); //Buscar el tipo de cliente
-    /*
+
     app
       .route(`${this.routeparent}/client/:tipo/:name`) //buscar por nombre de cliente regular
-      .get(this.routesController.getNameClientR);*/
+      .get(this.routesController.getNameClientR);
 
     app
       .route(`${this.routeparent}/client/:id`)

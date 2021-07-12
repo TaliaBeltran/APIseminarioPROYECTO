@@ -1,11 +1,9 @@
 import ClientsModel, { IClients } from "../models/Clients";
 import PedidosModel, { IPedidos } from "../../pedidosmodule/models/pedidos";
-import UsersModel,{IUser, ISimpleUser} from "../../usermodule/models/Users";
+import UsersModel, { IUser, ISimpleUser } from "../../usermodule/models/Users";
 class BusinessClient {
-  constructor() {
-
-  }
-// ----------------- Agregar cliente -------------
+  constructor() {}
+  // ----------------- Agregar cliente -------------
   public async addClient(client: IClients) {
     try {
       let clientDb = new ClientsModel(client);
@@ -17,19 +15,29 @@ class BusinessClient {
     }
   }
 
-//------------Leer CLientes -------------
+  //------------Leer CLientes -------------
   public async readClients(): Promise<Array<IClients>>;
   public async readClients(id: string): Promise<IClients>;
-  public async readClients( query: any,  skip: number,  limit: number ): Promise<Array<IClients>>;
+  public async readClients(
+    query: any,
+    skip: number,
+    limit: number
+  ): Promise<Array<IClients>>;
 
-  public async readClients( params1?: string | any, params2?: number, params3?: number ): Promise<Array<IClients> | IClients> {
+  public async readClients(
+    params1?: string | any,
+    params2?: number,
+    params3?: number
+  ): Promise<Array<IClients> | IClients> {
     if (params1 && typeof params1 == "string") {
-      var result: IClients = await ClientsModel.findOne({ _id: params1, });
+      var result: IClients = await ClientsModel.findOne({ _id: params1 });
       return result;
     } else if (params1) {
       let skip = params2 ? params2 : 0;
       let limit = params3 ? params3 : 1;
-      let listClient: Array<IClients> = await ClientsModel.find(params1) .skip(skip) .limit(limit);
+      let listClient: Array<IClients> = await ClientsModel.find(params1)
+        .skip(skip)
+        .limit(limit);
       return listClient;
     } else {
       let listClient: Array<IClients> = await ClientsModel.find();
@@ -37,24 +45,24 @@ class BusinessClient {
     }
   }
 
-// ------Obtener el Tipo de Cliente -------------
-public async getTypeClient(idUs: string, tipo: string) {
-  let user = await UsersModel.find({ _id: idUs });
-  let client = await ClientsModel.find({ tipo: tipo });
-  console.log(client);
-  var result: Array<IClients> = client.filter((item: IClients) => {
-    //console.log(item.idUser + " " + idUs);
-    if (item.idUser.toString() == idUs.toString()) {
-      return true;
+  // ------Obtener el Tipo de Cliente -------------
+  public async getTypeClient(idUs: string, tipo: string) {
+    let user = await UsersModel.find({ _id: idUs });
+    let client = await ClientsModel.find({ tipo: tipo });
+    console.log(client);
+    var result: Array<IClients> = client.filter((item: IClients) => {
+      //console.log(item.idUser + " " + idUs);
+      if (item.idUser.toString() == idUs.toString()) {
+        return true;
+      }
+      return false;
+    });
+    console.log(result);
+    if (client != null) {
+      return client;
     }
-    return false;
-  });
-  console.log(result);
-  if (client != null) {
-    return client;
   }
-}
-/*/----- Obtener Nombres de  Clientes Regulares -------------
+  //----- Obtener Nombres de  Clientes Regulares -------------
   public async getNamesClientR(name: string, tipo: string) {
     let regularexpresion: RegExp = new RegExp(name.toLowerCase(), "regular");
     try {
@@ -75,13 +83,12 @@ public async getTypeClient(idUs: string, tipo: string) {
       return err;
     }
   }
-*/
-// --------------- Actualizar Cliente -------------------
+  // --------------- Actualizar Cliente -------------------
   public async updateClient(id: string, client: any) {
-    let result = await ClientsModel.update({ _id: id }, { $set: client});
+    let result = await ClientsModel.update({ _id: id }, { $set: client });
     return result;
   }
-// --------------- ELiminar Cliente -------------------
+  // --------------- ELiminar Cliente -------------------
   public async deleteClients(id: string) {
     let result = await ClientsModel.remove({ _id: id });
     return result;
@@ -89,7 +96,7 @@ public async getTypeClient(idUs: string, tipo: string) {
 
   // --------------- Agragar Pedido-------------------
   public async addPed(idCl: string, idPed: string) {
-    let client = await ClientsModel.findOne({ _id: idCl});
+    let client = await ClientsModel.findOne({ _id: idCl });
     if (client != null) {
       var pedido = await PedidosModel.findOne({ _id: idPed });
       if (pedido != null) {

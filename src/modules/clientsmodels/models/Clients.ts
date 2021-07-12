@@ -9,11 +9,11 @@ export interface IClients extends Document {
   telephone: string;
   uriphoto?: string; // foto de tienda de cliente
   pathphoto?: string;
-  state: string; //estado del cliente
+  state: string; //TipoCLiente: mayorista, supermercado , off
   probability: number; // probabilidad de negociacion
   zona: string;
   street: string; // calle y numero
-  tipo: string; //TipoCLiente: mayorista, supermercado , off
+  tipo: string; // tipo regular / potencial
   registerdate: Date;
   pedidos?: Array<IPedidos>;
   reunion?: Array<IReunion>;

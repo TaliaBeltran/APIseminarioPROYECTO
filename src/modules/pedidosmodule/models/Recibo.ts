@@ -12,10 +12,5 @@ const reciboSchema: Schema = new Schema({
   namevendedor: { type: String, required: true },
   products: { type: Array },
   total: { type: Number, default: 0 },
-  //registerdatePedido: { type: Date, required: true, default: Date.now },
-  //registerdateRecibo: { type: Date, required: true, default: Date.now },
-  //state: { type: String, required: true, default: "Sin Entregar" },
-  //methodpay: { type: String, required: true },
-  //cuentaBancaria: { type: String },
 });
 export default mongoose.model<IRecibo>("Recibo", reciboSchema);

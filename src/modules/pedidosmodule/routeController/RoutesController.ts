@@ -20,12 +20,24 @@ class RoutesController {
     res.status(201).json({ serverResponse: result });
   }
 
-  // -----------Agregar Pedido ----------------------
+  // -----------ver  Pedido creado ----------------------
   public async getPedido(req: Request, res: Response) {
     var pedido: BussinessPedidos = new BussinessPedidos();
     const result: Array<IPedidos> = await pedido.readPedido();
     res.status(200).json({ serverResponse: result });
   }
+  // VER PEDIDO DE CLIENTE
+  public async getPedidoClient(request: Request, response: Response) {
+    var pedido: BussinessPedidos = new BussinessPedidos();
+    var idC: string = request.params.idC;
+    try {
+      let result: Array<IPedidos> = await pedido.getPedidoClient(idC);
+      return response.status(200).json({ serverResponse: result });
+    } catch (err) {
+      return response.status(300).json({ serverResponse: "Ocurrio un error" });
+    }
+  }
+
   //--------------- Actualizar Pedido -------------------------
   public async updatePedido(req: Request, res: Response) {
     var ped: BussinessPedidos = new BussinessPedidos();
@@ -51,23 +63,19 @@ class RoutesController {
               res.status(200).json({ serverResponse: result });
               return;
             } else {
-              return res
-                .status(200)
-                .json({
-                  serverResponse:
-                    "Introduzca valores correctos en el metodo de pago",
-                });
+              return res.status(200).json({
+                serverResponse:
+                  "Introduzca valores correctos en el metodo de pago",
+              });
             }
           } else {
             var result = await ped.updatePedido(id, params);
             return res.status(201).json({ serverResponse: result });
           }
         } else {
-          return res
-            .status(300)
-            .json({
-              serverResponse: "Introduzca valores correctos al Ordenar",
-            });
+          return res.status(300).json({
+            serverResponse: "Introduzca valores correctos al Ordenar",
+          });
         }
       } else {
         if (params.methodpay) {
@@ -87,12 +95,10 @@ class RoutesController {
             res.status(200).json({ serverResponse: result });
             return;
           } else {
-            return res
-              .status(200)
-              .json({
-                serverResponse:
-                  "Introduzca valores correctos en el metodo de pago",
-              });
+            return res.status(200).json({
+              serverResponse:
+                "Introduzca valores correctos en el metodo de pago",
+            });
           }
         } else {
           var result = await ped.updatePedido(id, params);
@@ -113,11 +119,9 @@ class RoutesController {
         res.status(200).json({ serverResponse: result });
         return;
       } else {
-        return res
-          .status(300)
-          .json({
-            serverResponse: "No se puede eliminar despues del limite de tiempo",
-          });
+        return res.status(300).json({
+          serverResponse: "No se puede eliminar despues del limite de tiempo",
+        });
       }
     } catch (err) {
       return res.status(200).json({ serverResponse: err });
@@ -130,24 +134,20 @@ class RoutesController {
     let idPro = req.body.idPro;
 
     if (idPedido == null && idPro == null && Cant == null) {
-      res
-        .status(300)
-        .json({
-          serverResponse:
-            "No se definieron los id del pedido , producto, cantidad",
-        });
+      res.status(300).json({
+        serverResponse:
+          "No se definieron los id del pedido , producto, cantidad",
+      });
       return;
     }
     try {
       var pedido: BussinessPedidos = new BussinessPedidos();
       var result = await pedido.addProduct(idPedido, idPro, parseInt(Cant));
       if (result == null) {
-        res
-          .status(300)
-          .json({
-            serverResponse:
-              "El existe el pedido o producto o la cantidad esta incorrecta",
-          });
+        res.status(300).json({
+          serverResponse:
+            "El existe el pedido o producto o la cantidad esta incorrecta",
+        });
         return;
       }
       return res.status(200).json({ serverResponse: result });

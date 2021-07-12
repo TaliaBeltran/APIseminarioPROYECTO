@@ -31,40 +31,9 @@ class RoutesControllerP {
     var pro: BussinessProducts = new BussinessProducts();
     let id: string = req.params.id;
     var params = req.body;
-    try {
-      if (params.name) {
-        if (!validacion(params.name)) {
-          return res
-            .status(300)
-            .json({ serverResponse: "Error en validacion nombre" });
-        }
-      }
-      if (params.stock) {
-        if (!validacion(params.stock)) {
-          return res
-            .status(300)
-            .json({ serverResponse: "Error en validacion stock" });
-        }
-      }
-      if (params.price) {
-        if (!validacion(params.price)) {
-          return res
-            .status(300)
-            .json({ serverResponse: "Error en validacion precio" });
-        }
-      }
-      if (params.ofert) {
-        if (!validacion(params.ofert)) {
-          return res
-            .status(300)
-            .json({ serverResponse: "Error en validacion oferta" });
-        }
-      }
-      var result = await pro.updateProduct(id, params);
-      return res.status(201).json({ serverResponse: result });
-    } catch (err) {
-      return res.status(300).json({ serverResponse: "Error" });
-    }
+
+    var result = await pro.updateProduct(id, params);
+    return res.status(201).json({ serverResponse: result });
   }
   //--------------- Eliminar Producto -----------------------
   public async deleteProduct(req: Request, res: Response) {
@@ -150,12 +119,10 @@ class RoutesControllerP {
         nosubidas += 1;
       }
     }
-    return res
-      .status(200)
-      .json({
-        serverResponse:
-          "Imagen subida: " + subidas + ", imagen no subida: " + nosubidas,
-      });
+    return res.status(200).json({
+      serverResponse:
+        "Imagen subida: " + subidas + ", imagen no subida: " + nosubidas,
+    });
   }
   //---------------- Obtener el Imagen de Producto ------------------------
   public async getimageProduct(req: Request, res: Response) {

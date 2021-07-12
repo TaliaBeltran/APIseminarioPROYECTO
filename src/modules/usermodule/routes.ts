@@ -20,9 +20,7 @@ class Routes {
       .route(`${this.routeparent}/users`)
       .post(this.routesController.createUsers);
 
-    app
-      .route(`${this.routeparent}/users`)
-      .get(this.routesController.getUsers);
+    app.route(`${this.routeparent}/users`).get(this.routesController.getUsers);
 
     app
       .route(`${this.routeparent}/users/:id`)
@@ -47,13 +45,11 @@ class Routes {
     //**--ROLES ROUTES--------------------------------------------------------------------------------------- */
     app
       .route(`${this.routeparent}/roles`)
-      .post( this.routesController.createRol);
-    app
-      .route(`${this.routeparent}/roles`)
-      .get(this.routesController.getRol);
+      .post(this.routesController.createRol);
+    app.route(`${this.routeparent}/roles`).get(this.routesController.getRol);
     app
       .route(`${this.routeparent}/roles/:id`)
-      .delete( this.routesController.removeRol);
+      .delete(this.routesController.removeRol);
 
     //--------AÑADIR O ELIMINAR CLIENTES A USUARIOS -----------
     app

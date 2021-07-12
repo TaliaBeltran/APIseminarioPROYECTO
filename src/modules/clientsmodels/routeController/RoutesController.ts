@@ -4,13 +4,7 @@ import BussinessReunion from "../businessController/BussinessReunion";
 import { IClients } from "../models/Clients";
 import { IReunion } from "../models/Agenda";
 import validator from "validator";
-import {
-  validacion,
-  validacionphone,
-  validacionfecha,
-  validacionprob,
-  validaciónhora,
-} from "../validacion";
+import { validacionfecha, validacionprob, validaciónhora } from "../validacion";
 import isEmpty from "is-empty";
 import path from "path";
 import sha1 from "sha1";
@@ -53,7 +47,7 @@ class RoutesController {
       return res.status(300).json({ serverResponse: "Error" });
     }
   }
-  /*
+
   public async getNameClientR(request: Request, response: Response) {
     let client: BussinessClient = new BussinessClient();
     let tipo: string = request.params.tipo;
@@ -74,7 +68,6 @@ class RoutesController {
       return response.status(300).json({ serverResponse: err });
     }
   }
-*/
 
   // -------------- Actualizar  Cliente -------------------
   public async updateClient(req: Request, res: Response) {
@@ -224,11 +217,11 @@ class RoutesController {
           res.status(201).json({ serverResponse: result });
           return;
         } else {
-          return res.status(300).json({ serverResponse: "La fecha esta mal" });
+          return res.status(300).json({ serverResponse: " Error de fecha " });
         }
       } else {
         return res.status(300).json({
-          serverResponse: "Fecha y hora son necesarios",
+          serverResponse: " La Fecha y hora son necesarios",
         });
       }
     } catch (err) {

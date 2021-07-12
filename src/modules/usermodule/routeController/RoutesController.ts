@@ -8,7 +8,6 @@ import { ISimpleUser, IUser } from "../models/Users";
 import isEmpty from "is-empty";
 import path from "path";
 import validator from "validator";
-import { validacion } from "../validation";
 import { IRoles } from "../models/Roles";
 
 interface Icredentials {
@@ -127,30 +126,6 @@ class RoutesController {
     var user: BusinessUser = new BusinessUser();
     let id: string = request.params.id;
     var params = request.body;
-    if (params.email) {
-      if (!validator.isEmail(request.body.email)) {
-        return response.status(201).json({
-          serverResponse:
-            /*result*/ "Intruduzca email y nombre de usuario correcto",
-        });
-      }
-    }
-    if (params.username) {
-      if (!validacion(request.body.username)) {
-        return response.status(201).json({
-          serverResponse:
-            /*result*/ "Intruduzca email y nombre de usuario correcto",
-        });
-      }
-    }
-    if (params.password) {
-      params.password = sha1(params.password);
-    }
-    if (params.tipo) {
-      return response
-        .status(300)
-        .json({ serverResponse: "No se puede modificar el tipo de usuario" });
-    }
 
     var result = await user.updateUsers(id, params);
     response.status(200).json({ serverResponse: result });
@@ -242,16 +217,7 @@ class RoutesController {
     var dir = `${__dirname}/../../../../avatarfiles`;
     var absolutepath = path.resolve(dir);
     var files: any = request.files;
-    /*var file: any = files.portrait;
-    if (!file) {
-      response.status(300).json({
-        serverResponse:
-          "error el archivo debe ser subido con el parametro portrait!",
-      });
-      return;
-    }*/
     var key: Array<string> = Object.keys(files);
-    /**/
     var copyDirectory = (totalpath: string, file: any) => {
       return new Promise((resolve, reject) => {
         file.mv(totalpath, (err: any, success: any) => {
@@ -274,9 +240,7 @@ class RoutesController {
       var file: any = files[key[i]];
       if (
         getFileExtension(file.name) === "jpg" ||
-        getFileExtension(file.name) === "png" ||
-        getFileExtension(file.name) === "gif" ||
-        getFileExtension(file.name) === "jpeg"
+        getFileExtension(file.name) === "png"
       ) {
         var filehash: string = sha1(new Date().toString()).substr(0, 7);
         var newname: string = `${filehash}_${file.name}`;
@@ -300,25 +264,6 @@ class RoutesController {
       } else {
         nosubidas += 1;
       }
-
-      /*file.mv(totalpath, async (err: any, success: any) => {
-      if (err) {
-        response
-          .status(300)
-          .json({ serverResponse: "No se pudo almacenar el archivo" });
-        return;
-      }
-
-      userToUpdate.uriavatar = "/api/getportrait/" + id;
-      userToUpdate.pathavatar = totalpath;
-      var userResult: IUser = await userToUpdate.save();
-      var simpleUser: ISimpleUser = {
-        username: userResult.username,
-        uriavatar: userResult.uriavatar,
-        pathavatar: userResult.pathavatar,
-      };
-      response.status(300).json({ serverResponse: simpleUser });
-    });*/
     }
   }
 
@@ -380,7 +325,7 @@ class RoutesController {
     let idCli: string = request.body.idCli;
     try {
       let result = await user.removeClient(idUs, idCli);
-      let result1 = await client.deleteClients(idCli); //ojo preguntar si esta bien, esto hace que si borramos un cliente desde el usuario el cliente totalmente se borra
+      let result1 = await client.deleteClients(idCli);
       return response.status(200).json({ serverResponse: result, result1 });
     } catch (err) {
       return response.status(300).json({ serverResponse: err });

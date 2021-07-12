@@ -6,21 +6,29 @@ import UserModel from "../../usermodule/models/Users";
 import { validarEliminacionPedido } from "../validation";
 
 class BussinessPedidos {
-  constructor() {
-    
-  }
-//----------------Leer Pedido -------------------------
+  constructor() {}
+  //----------------Leer Pedido -------------------------
   public async readPedido(): Promise<Array<IPedidos>>;
   public async readPedido(id: string): Promise<IPedidos>;
-  public async readPedido( query: any, skip: number, limit: number): Promise<Array<IPedidos>>;
-  public async readPedido( params1?: string | any, params2?: number, params3?: number): Promise<Array<IPedidos> | IPedidos> {
+  public async readPedido(
+    query: any,
+    skip: number,
+    limit: number
+  ): Promise<Array<IPedidos>>;
+  public async readPedido(
+    params1?: string | any,
+    params2?: number,
+    params3?: number
+  ): Promise<Array<IPedidos> | IPedidos> {
     if (params1 && typeof params1 == "string") {
       var result: IPedidos = await PedidoModel.findOne({ _id: params1 });
       return result;
     } else if (params1) {
       let skip = params2 ? params2 : 0;
       let limit = params3 ? params3 : 1;
-      let listUser: Array<IPedidos> = await PedidoModel.find(params1).skip(skip).limit(limit);
+      let listUser: Array<IPedidos> = await PedidoModel.find(params1)
+        .skip(skip)
+        .limit(limit);
       return listUser;
     } else {
       let listUser: Array<IPedidos> = await PedidoModel.find();
@@ -38,7 +46,26 @@ class BussinessPedidos {
       return err;
     }
   }
-//----------------Actualizar Pedido -------------------------
+
+  //  ver pedido del cliente
+  public async getPedidoClient(idC: string) {
+    let pedido = await PedidoModel.find();
+    var result: Array<IPedidos> = pedido.filter((item: IPedidos) => {
+      console.log(item.idClient + " " + idC);
+      if (item.idClient.toString() == idC.toString()) {
+        return true;
+      }
+
+      return false;
+    });
+    console.log(result);
+    if (result != null) {
+      return result;
+    }
+    return null;
+  }
+
+  //----------------Actualizar Pedido -------------------------
   public async updatePedido(id: string, user: any) {
     let result = await PedidoModel.update({ _id: id }, { $set: user });
     return result;
@@ -50,7 +77,7 @@ class BussinessPedidos {
       if (pedido != null) {
         if (validarEliminacionPedido(pedido.registerdate)) {
           console.log(validarEliminacionPedido(pedido.registerdate));
-          let result = await PedidoModel.remove({ _id: idP});
+          let result = await PedidoModel.remove({ _id: idP });
           return result;
         } else {
           return null;
@@ -81,12 +108,16 @@ class BussinessPedidos {
               registerdate: new Date(),
             };
             pedido.products.push(SimpleProducts);
-            return await pedido.save(); 
+            return await pedido.save();
           } else {
-            return response.status(300).json({ serverResponse: "Cantidad Limitada" });
+            return response
+              .status(300)
+              .json({ serverResponse: "Cantidad Limitada" });
           }
         } catch (err) {
-          return response.status(300).json({ serverResponse: "Error  producto a;adido" });
+          return response
+            .status(300)
+            .json({ serverResponse: "Error  producto a;adido" });
         }
       }
       return null;
@@ -95,7 +126,10 @@ class BussinessPedidos {
   }
 
   //----------------Actualizar el Producto Pedido -------------------------
-  public async updateProductPedido(idPed: string, idProd: string,cant: number
+  public async updateProductPedido(
+    idPed: string,
+    idProd: string,
+    cant: number
   ) {
     let pedido = await PedidoModel.findOne({ _id: idPed });
 
@@ -136,7 +170,7 @@ class BussinessPedidos {
     }
     return null;
   }
-//----------------Remover Productos -------------------------
+  //----------------Remover Productos -------------------------
   public async removeProducts(idPed: string, idProd: string) {
     let pedido = await PedidoModel.findOne({ _id: idPed });
     var product = await ProductsModel.findOne({ _id: idProd });
@@ -158,7 +192,7 @@ class BussinessPedidos {
     }
     return null;
   }
-//---------------- Agregar Recibo -------------------------
+  //---------------- Agregar Recibo -------------------------
   public async addRecibo(idUs: string, idCli: string, idPed: string) {
     let pedido = await PedidoModel.findOne({ _id: idPed });
     let cliente = await ClientsModel.findOne({ _id: idCli });
