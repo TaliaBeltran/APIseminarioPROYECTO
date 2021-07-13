@@ -20,10 +20,6 @@ class Routes {
       .get(this.routesController.getClient); // Mostrar Clientes
 
     app
-      .route(`${this.routeparent}/client/tipo/:date/:id`)
-      .get(this.routesController.getTypeClient); //Buscar el tipo de cliente
-
-    app
       .route(`${this.routeparent}/client/:tipo/:name`) //buscar por nombre de cliente regular
       .get(this.routesController.getNameClientR);
 
@@ -51,10 +47,6 @@ class Routes {
       .get(this.routesController.getreunion); // Mostrar Reunion
 
     app
-      .route(`${this.routeparent}/agendar/pendientes`)
-      .get(this.routesController.getreunionPendientes); // Mostrar Reuniones Pendientes
-
-    app
       .route(`${this.routeparent}/agendar/:id`)
       .put(this.routesController.updateReunion); // Actuaizar Reunion
 
@@ -63,12 +55,12 @@ class Routes {
       .delete(this.routesController.deleteReunion); //  Eliminar Reunion
 
     app
-      .route(`${this.routeparent}/addreunion/:id`)
+      .route(`${this.routeparent}/addreunion/:idCl/:idReu`)
       .put(this.routesController.addReunion); // Agregar Reunion
 
     app
       .route(`${this.routeparent}/removereunion/:id`)
-      .delete(this.routesController.removeReunion); //  Remover Reunion
+      .put(this.routesController.removeReunion); //  Remover Reunion
 
     //--------------- Pedidos--
     app

@@ -11,9 +11,9 @@ import validator from "validator";
 import { IRoles } from "../models/Roles";
 
 interface Icredentials {
+  username: string;
   email: string;
   password: string;
-  username: string;
 }
 class RoutesController {
   constructor() {}
@@ -63,34 +63,6 @@ class RoutesController {
       return;
     }
     response.status(200).json({ serverResponse: "Credenciales incorrectas" });
-  }
-
-  //----- refrescacion de token
-  public async refreshToken(request: Request, response: Response) {
-    const refreshToken = request.headers.refresh as string;
-
-    if (!refreshToken) {
-      response
-        .status(400)
-        .json({ serverResponse: "Error no hay refreshtoken" });
-    }
-    var user: BusinessUser = new BusinessUser();
-    var userData: IUser;
-    try {
-      const verifyResult = jsonwebtoken.verify(refreshToken, "secret123");
-      userData = verifyResult as IUser;
-      let result = await user.readUsers(userData.id);
-    } catch (err) {
-      response.status(400).json({ serverResponse: err });
-    }
-    var token: string = jsonwebtoken.sign(
-      { id: userData._id, email: userData.email },
-      "secret",
-      {
-        expiresIn: 60 * 60 * 24, // expira en 24 horas
-      }
-    );
-    response.json({ serverResponse: "Todo Ok", token });
   }
 
   // -----------CREAR USUARIO--------------
@@ -150,7 +122,7 @@ class RoutesController {
     var result = await user.addRol(idUs, idRol);
     if (result == null) {
       response.status(300).json({
-        serverResponse: "El rol o usuario no existen o y fue asigndo",
+        serverResponse: "El rol o usuario no existen, o ya se asigno ese rol",
       });
       return;
     }

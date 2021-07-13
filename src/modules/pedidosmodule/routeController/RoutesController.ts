@@ -145,8 +145,7 @@ class RoutesController {
       var result = await pedido.addProduct(idPedido, idPro, parseInt(Cant));
       if (result == null) {
         res.status(300).json({
-          serverResponse:
-            "El existe el pedido o producto o la cantidad esta incorrecta",
+          serverResponse: " el pedido o producto o la cantidad esta incorrecta",
         });
         return;
       }

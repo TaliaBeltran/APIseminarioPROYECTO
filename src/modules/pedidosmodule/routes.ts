@@ -38,7 +38,7 @@ class Routes {
       .delete(this.routesController.deletePedido); // Eliminar Pedido
 
     app
-      .route(`${this.routeparent}/addProduct/:id/:cant`)
+      .route(`${this.routeparent}/addProduct/:idPedido/:idPro/:cant`)
       .put(this.routesController.addProduct); // Agregar Producto
 
     app

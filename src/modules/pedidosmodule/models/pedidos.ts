@@ -28,11 +28,6 @@ const pedidosSchema: Schema = new Schema({
     required: true,
     default: Date.now,
   },
-  /*ordenarP: {
-    type: String,
-    required: true,
-    default: "OFF",
-  },*/
   methodpay: {
     type: String,
     required: true,
@@ -49,6 +44,7 @@ const pedidosSchema: Schema = new Schema({
   },
   idClient: { type: String },
   FechaEntrega: { type: String },
-  horaEntrega: { type: String },
+  horaEntrega: 
+  { type: String },
 });
 export default mongoose.model<IPedidos>("Pedido", pedidosSchema);

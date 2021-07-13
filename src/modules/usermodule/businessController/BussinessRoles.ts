@@ -16,7 +16,6 @@ class BussinessRoles {
   }
   public async deleteRol(id: String) {
     let result = await RolesModel.remove({ _id: id });
-    ////----------////
     return result;
   }
 }

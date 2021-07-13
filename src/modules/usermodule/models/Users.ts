@@ -1,6 +1,6 @@
 import mongoose, { Schema, Document } from "mongoose";
 import RolesModel, { IRoles } from "./Roles";
-import validator from "validator"; 
+import validator from "validator";
 import { IClients } from "../../clientsmodels/models/Clients";
 
 export interface ISimpleUser {
@@ -19,11 +19,11 @@ export interface IUser extends Document {
   email: string;
   registerdate: Date;
   password: string;
-  tipo: string;
+  tipo: string; // Admin  o vendedor
   roles: Array<IRoles>;
-  uriavatar: string;
-  pathavatar: string;
-  clients: Array<IClients>;
+  uriavatar?: string;
+  pathavatar?: string;
+  clients?: Array<IClients>;
 }
 const userSchema: Schema = new Schema({
   username: {

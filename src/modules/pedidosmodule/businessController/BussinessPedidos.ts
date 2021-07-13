@@ -48,6 +48,7 @@ class BussinessPedidos {
   }
 
   //  ver pedido del cliente
+  
   public async getPedidoClient(idC: string) {
     let pedido = await PedidoModel.find();
     var result: Array<IPedidos> = pedido.filter((item: IPedidos) => {

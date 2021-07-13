@@ -1,4 +1,3 @@
-
 export var validacion = (value: string) => {
   const regexp = /^(?=.{3,20}$)(?![_.])(?!.*[_.]{2})[a-zA-Z0-9._]+(?<![_.])$/;
 
@@ -30,12 +29,22 @@ export var validarEliminacionPedido = (value: Date) => {
   var minutoActual = parseInt(actual.toString().substring(19, 21));
   var transcurridoMinutos = minutoActual - minutoPedido;
   var transcurridoHoras = horaactual - horaPedido;
-  console.log( "Hora actual " +  horaactual + " minuto actual " +  minutoActual +
-      " horaPedido " + horaPedido +  " minutopedido " + minutoPedido +
-      " restatotal " +  transcurridoHoras +  " " + transcurridoMinutos
+  console.log(
+    "Hora actual " +
+      horaactual +
+      " minuto actual " +
+      minutoActual +
+      " horaPedido " +
+      horaPedido +
+      " minutopedido " +
+      minutoPedido +
+      " restatotal " +
+      transcurridoHoras +
+      " " +
+      transcurridoMinutos
   );
   if (transcurridoHoras > 0) {
-        return false;
+    return false;
   } else if (transcurridoMinutos > 10) {
     return false;
   }

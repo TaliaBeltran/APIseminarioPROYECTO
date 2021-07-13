@@ -13,9 +13,9 @@ class Routes {
     //**--USER ROUTES--------------------------------------------------------------------------------------- */
     app.route(`${this.routeparent}/login`).post(this.routesController.login);
 
-    app
+    /*app
       .route(`${this.routeparent}/refreshToken`)
-      .post(this.routesController.refreshToken);
+      .post(this.routesController.refreshToken);*/
     app
       .route(`${this.routeparent}/users`)
       .post(this.routesController.createUsers);
@@ -36,11 +36,11 @@ class Routes {
       .get(this.routesController.getPortrait);
 
     app
-      .route(`${this.routeparent}/addrol/:id`)
+      .route(`${this.routeparent}/addrol/:idU/:idRol`)
       .put(this.routesController.addRol);
     app
-      .route(`${this.routeparent}/removerol/:id`)
-      .put(this.routesController.removeUserRol);
+      .route(`${this.routeparent}/removerol/:idu/:idRol`)
+      .delete(this.routesController.removeUserRol);
 
     //**--ROLES ROUTES--------------------------------------------------------------------------------------- */
     app

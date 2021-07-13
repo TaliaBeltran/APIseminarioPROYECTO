@@ -31,23 +31,6 @@ class RoutesController {
     }
   }
 
-  // -------------- Mostrar el Tipo de Cliente -------------------
-  public async getTypeClient(req: Request, res: Response) {
-    let client: BussinessClient = new BussinessClient();
-    let date: string = req.params.date;
-    let id: string = req.params.id;
-    console.log("principio " + id + " " + date + " finnnn");
-    try {
-      let clientData: Array<IClients> | IClients = await client.getTypeClient(
-        id,
-        date
-      );
-      res.status(200).json({ serverResponse: clientData });
-    } catch (err) {
-      return res.status(300).json({ serverResponse: "Error" });
-    }
-  }
-
   public async getNameClientR(request: Request, response: Response) {
     let client: BussinessClient = new BussinessClient();
     let tipo: string = request.params.tipo;
@@ -221,7 +204,7 @@ class RoutesController {
         }
       } else {
         return res.status(300).json({
-          serverResponse: " La Fecha y hora son necesarios",
+          serverResponse: " La 0Fecha y hora son necesarios",
         });
       }
     } catch (err) {
@@ -240,54 +223,6 @@ class RoutesController {
     }
   }
 
-  // -------------- Mostrar Reuniones Pendientes -------------------
-  public async getreunionPendientes(req: Request, res: Response) {
-    let reunion: BussinessReunion = new BussinessReunion();
-    try {
-      let reunionData: Array<IReunion> = await reunion.readReunion();
-      var date: any = new Date();
-      let day = date.getDate();
-      let month = date.getMonth() + 1;
-      let year = date.getFullYear();
-      if (month < 10) {
-        date = `${day}-0${month}-${year}`;
-      } else {
-        date = `${day}-${month}-${year}`;
-      }
-      function compare(fecha: string, fecha2: any) {
-        var xMonth = fecha.substring(3, 5);
-        var xDay = fecha.substring(0, 2);
-        var xYear = fecha.substring(6, 10);
-        var yMonth = fecha2.substring(3, 5);
-        var yDay = fecha2.substring(0, 2);
-        var yYear = fecha2.substring(6, 10);
-        if (xYear > yYear) {
-          return true;
-        } else {
-          if (xYear == yYear) {
-            if (xMonth > yMonth) {
-              return true;
-            } else {
-              if (xMonth == yMonth) {
-                if (xDay > yDay) return true;
-                else return false;
-              } else return false;
-            }
-          } else return false;
-        }
-      }
-
-      var result: Array<IReunion> = reunionData.filter((item: IReunion) => {
-        if (compare(item.fecha, date)) {
-          return true;
-        }
-        return false;
-      });
-      res.status(200).json({ serverResponse: result });
-    } catch (err) {
-      return res.status(300).json({ serverResponse: err });
-    }
-  }
   // -------------- Actualizar Reunion -------------------
   public async updateReunion(req: Request, res: Response) {
     var reunion: BussinessReunion = new BussinessReunion();
@@ -317,31 +252,17 @@ class RoutesController {
 
   // -------------- Agregar Reunion-------------------
   public async addReunion(req: Request, res: Response) {
-    let idCl: string = req.params.id;
-    let idReu = req.body.idReu;
-    if (idCl == null && idReu == null) {
-      res.status(300).json({
-        serverResponse:
-          "Id del cliente,  id de la reunion no fueron ingresados",
-      });
-      return;
-    }
+    let reunion: BussinessReunion = new BussinessReunion();
+    let idCl: string = req.params.idCl;
+    let idReu: string = req.params.idReu;
     try {
-      var reunion: BussinessReunion = new BussinessReunion();
       var result = await reunion.addReu(idCl, idReu);
-      if (result == null) {
-        res
-          .status(300)
-          .json({ serverResponse: "La reunion o cliente no existen" });
-        return;
-      } else {
-        return res.status(200).json({ serverResponse: result });
-      }
+
+      return res.status(201).json({ serverResponse: result });
     } catch (err) {
-      return res.status(300).json({ serverResponse: err });
+      return res.status(300).json({ serverResponse: "Error" });
     }
   }
-
   //------------ Eliminar Reunion ---------
   public async removeReunion(req: Request, res: Response) {
     let reunion: BussinessReunion = new BussinessReunion();
