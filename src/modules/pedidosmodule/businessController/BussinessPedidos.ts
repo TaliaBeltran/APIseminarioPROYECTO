@@ -3,7 +3,6 @@ import PedidoModel, { IPedidos } from "../models/pedidos";
 import ProductsModel, { IProducts, ISimpleProducts } from "../models/Products";
 import ClientsModel from "../../clientsmodels/models/Clients";
 import UserModel from "../../usermodule/models/Users";
-import { validarEliminacionPedido } from "../validation";
 
 class BussinessPedidos {
   constructor() {}
@@ -47,8 +46,8 @@ class BussinessPedidos {
     }
   }
 
-  //  ver pedido del cliente
-  
+  //-----------ver pedido del cliente-------------------
+
   public async getPedidoClient(idC: string) {
     let pedido = await PedidoModel.find();
     var result: Array<IPedidos> = pedido.filter((item: IPedidos) => {
@@ -74,23 +73,14 @@ class BussinessPedidos {
   //----------------Eliminar Pedido -------------------------
   public async deletePedido(idP: string) {
     try {
-      var pedido: IPedidos = await PedidoModel.findOne({ _id: idP });
-      if (pedido != null) {
-        if (validarEliminacionPedido(pedido.registerdate)) {
-          console.log(validarEliminacionPedido(pedido.registerdate));
-          let result = await PedidoModel.remove({ _id: idP });
-          return result;
-        } else {
-          return null;
-        }
-      } else {
-        return null;
-      }
+      let result = await PedidoModel.remove({ _id: idP });
+      return result;
     } catch (err) {
-      return response.status(300).json({ serverResponse: err });
+      return response
+        .status(300)
+        .json({ serverResponse: "Eror al eliminar pedido" });
     }
   }
-
   //----------------Agregar Producto -------------------------
   public async addProduct(idPed: string, IdPro: string, Cant: number) {
     let pedido = await PedidoModel.findOne({ _id: idPed });
@@ -118,7 +108,7 @@ class BussinessPedidos {
         } catch (err) {
           return response
             .status(300)
-            .json({ serverResponse: "Error  producto a;adido" });
+            .json({ serverResponse: "Error  producto añadido" });
         }
       }
       return null;
@@ -127,6 +117,7 @@ class BussinessPedidos {
   }
 
   //----------------Actualizar el Producto Pedido -------------------------
+
   public async updateProductPedido(
     idPed: string,
     idProd: string,
@@ -194,6 +185,7 @@ class BussinessPedidos {
     return null;
   }
   //---------------- Agregar Recibo -------------------------
+
   public async addRecibo(idUs: string, idCli: string, idPed: string) {
     let pedido = await PedidoModel.findOne({ _id: idPed });
     let cliente = await ClientsModel.findOne({ _id: idCli });

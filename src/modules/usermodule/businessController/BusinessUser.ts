@@ -38,7 +38,7 @@ class BusinessUser {
   }
   //addUsers
   //CRUD
-  //---CRAR USUARIOS
+  //---CRAR USUARIOS-----------------------
   public async addUsers(user: IUser) {
     try {
       let userDb = new UsersModel(user);
@@ -48,6 +48,7 @@ class BusinessUser {
       return err;
     }
   }
+  // ---- Lee un solo usuario seleccionado --------
 
   public async readOnlyUsers(idUs: string) {
     let users = await UsersModel.findOne({ _id: idUs });
@@ -56,19 +57,19 @@ class BusinessUser {
     }
     return null;
   }
-  //---ACTUALIZAR USUARIOS
+  //---ACTUALIZAR USUARIOS-----------------------------
   public async updateUsers(id: string, user: any) {
     let result = await UsersModel.update({ _id: id }, { $set: user });
     return result;
   }
 
-  //--ELIMINAR USUARIOS
+  //--ELIMINAR USUARIOS--------------------
   public async deleteUsers(id: string) {
     let result = await UsersModel.remove({ _id: id });
     return result;
   }
 
-  //---AÑADIR ROL AL USUARIO
+  //---AÑADIR ROL  A UN USUARIO----------------------
   public async addRol(idUs: string, idRol: string) {
     let user = await UsersModel.findOne({ _id: idUs });
     if (user != null) {
@@ -91,7 +92,7 @@ class BusinessUser {
     return null;
   }
 
-  //---ELIMINAR ROL AL USUARIO
+  //---ELIMINAR ROL AL USUARIO---------------------
   public async removeRol(idUs: string, idRol: string) {
     let user = await UsersModel.findOne({ _id: idUs });
     var rol = await RolesModel.findOne({ _id: idRol });
@@ -116,7 +117,7 @@ class BusinessUser {
     var contraseña: string = "contraseña generada";
     return contraseña;
   }
-  //-----------------------
+  //-----------AGREGAR CLIENTE A USUARIO----------------------
 
   public async addClient(idUs: string, idCl: string) {
     let user = await UsersModel.findOne({ _id: idUs });
@@ -131,6 +132,7 @@ class BusinessUser {
     return null;
   }
 
+  // -------ELIMINAR CLIENTE A USUARIO--------------------
   public async removeClient(idUs: string, idCli: string) {
     let user = await UsersModel.findOne({ _id: idUs });
     var Cli = await ClientModel.findOne({ _id: idCli });

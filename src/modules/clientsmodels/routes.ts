@@ -11,6 +11,7 @@ class Routes {
   }
 
   private configureRoutes(app: Express) {
+    //----------------ROUTES  CLIENT--------------------------------------
     app
       .route(`${this.routeparent}/client`)
       .post(this.routesController.createClient); // Crear Cliente
@@ -18,10 +19,6 @@ class Routes {
     app
       .route(`${this.routeparent}/client`)
       .get(this.routesController.getClient); // Mostrar Clientes
-
-    app
-      .route(`${this.routeparent}/client/:tipo/:name`) //buscar por nombre de cliente regular
-      .get(this.routesController.getNameClientR);
 
     app
       .route(`${this.routeparent}/client/:id`)
@@ -37,7 +34,7 @@ class Routes {
       .route(`${this.routeparent}/clientgetportrait/:id`)
       .get(this.routesController.clientgetportrait); // Mostrar Foto de Cliente
 
-    //-------Agregar Reunion -----------------
+    //----------------------RUTAS AGENDA----------------
     app
       .route(`${this.routeparent}/agendar`)
       .post(this.routesController.createreunion); // Crear Reunion
@@ -55,20 +52,20 @@ class Routes {
       .delete(this.routesController.deleteReunion); //  Eliminar Reunion
 
     app
-      .route(`${this.routeparent}/addreunion/:idCl/:idReu`)
+      .route(`${this.routeparent}/addreunion/:id`) //  idCl_ al que se le quiere agregar la reunion
       .put(this.routesController.addReunion); // Agregar Reunion
 
     app
-      .route(`${this.routeparent}/removereunion/:id`)
+      .route(`${this.routeparent}/removereunion/:id`) //idCl_ al que se le quiere eliminar la reunion
       .put(this.routesController.removeReunion); //  Remover Reunion
 
-    //--------------- Pedidos--
+    //--------------ROUTES PEDIDOS DE CLIENTS----
     app
-      .route(`${this.routeparent}/addPedido/:id`)
+      .route(`${this.routeparent}/addPedido/:id`) //  idCl_ alque deseamos agregarle un pedido
       .put(this.routesController.addPedidoClients); //Agregar Pedido de Cliente
 
     app
-      .route(`${this.routeparent}/removePedido/:id`)
+      .route(`${this.routeparent}/removePedido/:id`) //idCl_ _alque deseamos eliminarle un pedido
       .put(this.routesController.removePedidoClients); // REmover Pedido de Cliente
   }
 }

@@ -3,8 +3,6 @@ import BussinessPedidos from "../businessController/BussinessPedidos";
 import BussinessClient from "../../clientsmodels/businessController/BussinessClients";
 import isEmpty from "is-empty";
 import path from "path";
-import validator from "validator";
-import { validacionOrdenarP } from "../validation";
 import { IPedidos } from "../models/pedidos";
 import sha1 from "sha1";
 
@@ -44,70 +42,9 @@ class RoutesController {
     let id: string = req.params.id;
     var params = req.body;
 
-    try {
-      if (params.ordenarP) {
-        if (validacionOrdenarP(params.ordenarP)) {
-          if (params.methodpay) {
-            if (params.methodpay.toLowerCase() == "cuenta bancaria") {
-              if (params.cuentaBancaria) {
-                params.cuentaBancaria = sha1(params.cuentaBancaria);
-                var result = await ped.updatePedido(id, params);
-                return res.status(201).json({ serverResponse: result });
-              } else {
-                return res
-                  .status(200)
-                  .json({ serverResponse: "Es necesario cuenta bancaria" });
-              }
-            } else if (params.methodpay.toLowerCase() === "efectivo") {
-              var result = await ped.updatePedido(id, params);
-              res.status(200).json({ serverResponse: result });
-              return;
-            } else {
-              return res.status(200).json({
-                serverResponse:
-                  "Introduzca valores correctos en el metodo de pago",
-              });
-            }
-          } else {
-            var result = await ped.updatePedido(id, params);
-            return res.status(201).json({ serverResponse: result });
-          }
-        } else {
-          return res.status(300).json({
-            serverResponse: "Introduzca valores correctos al Ordenar",
-          });
-        }
-      } else {
-        if (params.methodpay) {
-          if (params.methodpay.toLowerCase() == "cuenta bancaria") {
-            if (params.cuentaBancaria) {
-              params.cuentaBancaria = sha1(params.cuentaBancaria);
-              var result = await ped.updatePedido(id, params);
-              res.status(201).json({ serverResponse: result });
-              return;
-            } else {
-              return res
-                .status(200)
-                .json({ serverResponse: "Es necesario cuenta bancaria" });
-            }
-          } else if (params.methodpay.toLowerCase() === "efectivo") {
-            var result = await ped.updatePedido(id, params);
-            res.status(200).json({ serverResponse: result });
-            return;
-          } else {
-            return res.status(200).json({
-              serverResponse:
-                "Introduzca valores correctos en el metodo de pago",
-            });
-          }
-        } else {
-          var result = await ped.updatePedido(id, params);
-          return res.status(201).json({ serverResponse: result });
-        }
-      }
-    } catch (err) {
-      return res.status(300).json({ serverResponse: err });
-    }
+    var result = await ped.updatePedido(id, params);
+    res.status(201).json({ serverResponse: result });
+    return;
   }
   // ----------------- Eliminar Pedido ---------------------
   public async deletePedido(req: Request, res: Response) {

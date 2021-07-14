@@ -19,28 +19,28 @@ export interface IProducts extends Document {
 }
 
 const productsSchema: Schema = new Schema({
-  name: { 
-    type: String, 
-    required: true, 
+  name: {
+    type: String,
+    required: true,
   },
-  uriimage: { 
-    type: String, 
-  },
-  pathavathar: { 
+  uriimage: {
     type: String,
   },
-  stock: { 
-    type: Number, 
+  pathavathar: {
+    type: String,
+  },
+  stock: {
+    type: Number,
     required: true,
-   },
-  price: { 
-    type: Number, 
+  },
+  price: {
+    type: Number,
     required: true,
-   },
-  registerdate: { 
-    type: Date, 
-    required: true, 
+  },
+  registerdate: {
+    type: Date,
+    required: true,
     default: Date.now,
-   },
+  },
 });
 export default mongoose.model<IProducts>("Producto", productsSchema);

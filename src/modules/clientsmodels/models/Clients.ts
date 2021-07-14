@@ -49,6 +49,7 @@ const clientsSchema: Schema = new Schema({
   },
   state: {
     type: String,
+    defail: "off",
   },
   probability: {
     type: Number,

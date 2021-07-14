@@ -2,8 +2,8 @@ import { Request, Response } from "express";
 import BussinessPedidos from "../businessController/BussinessPedidos";
 
 class RoutesControllerR {
-
   // ------------- Agregar el Recibo del Pedido -----------------
+
   public async addReciboPedido(req: Request, res: Response) {
     let pedido: BussinessPedidos = new BussinessPedidos();
     let idUs: string = req.params.idUs;
@@ -13,7 +13,7 @@ class RoutesControllerR {
       var result = await pedido.addRecibo(idUs, idCli, idPed);
       return res.status(201).json({ serverResponse: result });
     } catch (err) {
-      return res.status(300).json({ serverResponse: "Error" });
+      return res.status(300).json({ serverResponse: "--- Error ---" });
     }
   }
 }

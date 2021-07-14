@@ -5,12 +5,13 @@ import { IRecibo } from "./Recibo";
 export interface IPedidos extends Document {
   state: string;
   products: Array<ISimpleProducts>;
+  ordenarP: string;
   registerdate: Date;
   methodpay: string;
   cuentaBancaria?: string;
   total: number;
   Recibo?: Array<IRecibo>;
-  idClient: string;
+  idClient?: string;
   FechaEntrega: String;
   horaEntrega: String;
 }
@@ -28,6 +29,11 @@ const pedidosSchema: Schema = new Schema({
     required: true,
     default: Date.now,
   },
+  ordenarP: {
+    type: String,
+    required: true,
+    default: "off",
+  },
   methodpay: {
     type: String,
     required: true,
@@ -44,7 +50,6 @@ const pedidosSchema: Schema = new Schema({
   },
   idClient: { type: String },
   FechaEntrega: { type: String },
-  horaEntrega: 
-  { type: String },
+  horaEntrega: { type: String },
 });
 export default mongoose.model<IPedidos>("Pedido", pedidosSchema);

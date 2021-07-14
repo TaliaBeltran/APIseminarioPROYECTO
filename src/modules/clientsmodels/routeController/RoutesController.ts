@@ -3,7 +3,6 @@ import BussinessClient from "../businessController/BussinessClients";
 import BussinessReunion from "../businessController/BussinessReunion";
 import { IClients } from "../models/Clients";
 import { IReunion } from "../models/Agenda";
-import validator from "validator";
 import { validacionfecha, validacionprob, validaciónhora } from "../validacion";
 import isEmpty from "is-empty";
 import path from "path";
@@ -28,27 +27,6 @@ class RoutesController {
       res.status(200).json({ serverResponse: clientData });
     } catch (err) {
       return res.status(300).json({ serverResponse: err });
-    }
-  }
-
-  public async getNameClientR(request: Request, response: Response) {
-    let client: BussinessClient = new BussinessClient();
-    let tipo: string = request.params.tipo;
-    let name: string = request.params.name;
-    console.log(tipo);
-    console.log(name);
-    try {
-      if (tipo && (tipo == "Potencial" || tipo == "Regular")) {
-        let clientData: Array<IClients> | IClients =
-          await client.getNamesClientR(name, tipo);
-        response.status(200).json({ serverResponse: clientData });
-      } else {
-        return response
-          .status(404)
-          .json({ serverResponse: "Coloque tipo de cliente valido" });
-      }
-    } catch (err) {
-      return response.status(300).json({ serverResponse: err });
     }
   }
 
@@ -77,6 +55,7 @@ class RoutesController {
       res.status(404).json({ serverResponse: err });
     }
   }
+
   // -------------- Subir Foto-------------------
   public async uploadPortrait(req: Request, res: Response) {
     var id: string = req.params.id;
@@ -212,7 +191,7 @@ class RoutesController {
     }
   }
 
-  // -------------- Obtener Reunion -------------------
+  // -------------- Mostrar Reuniones -------------------
   public async getreunion(req: Request, res: Response) {
     let reunion: BussinessReunion = new BussinessReunion();
     try {
@@ -250,20 +229,33 @@ class RoutesController {
     }
   }
 
-  // -------------- Agregar Reunion-------------------
-  public async addReunion(req: Request, res: Response) {
-    let reunion: BussinessReunion = new BussinessReunion();
-    let idCl: string = req.params.idCl;
-    let idReu: string = req.params.idReu;
+  // -------------- Agregar una Reunion a un cliente -------------------
+  public async addReunion(request: Request, response: Response) {
+    let idCl: string = request.params.id;
+    let idReu = request.body.idReu;
+    if (idCl == null && idReu == null) {
+      response.status(300).json({
+        serverResponse: "No se definio id del cliente ni el id de la reunion",
+      });
+      return;
+    }
     try {
+      var reunion: BussinessReunion = new BussinessReunion();
       var result = await reunion.addReu(idCl, idReu);
-
-      return res.status(201).json({ serverResponse: result });
+      if (result == null) {
+        response
+          .status(300)
+          .json({ serverResponse: "La reunion o cliente no existen" });
+        return;
+      } else {
+        return response.status(200).json({ serverResponse: result });
+      }
     } catch (err) {
-      return res.status(300).json({ serverResponse: "Error" });
+      return response.status(300).json({ serverResponse: err });
     }
   }
-  //------------ Eliminar Reunion ---------
+
+  //------------ Eliminar una Reunion  a un cliente ---------
   public async removeReunion(req: Request, res: Response) {
     let reunion: BussinessReunion = new BussinessReunion();
     let idCl: string = req.params.id;
@@ -271,20 +263,19 @@ class RoutesController {
     try {
       let result = await reunion.removeReu(idCl, idReu);
       let result1 = await reunion.deleteReunion(idReu);
-      return res.status(200).json({ serverResponse: result, result1 }); //preguntar si esta bien, esto hace que cada vez que eliminamos una reunion desde el cliente, la reunion totalmente se borra de la BD
+      return res.status(200).json({ serverResponse: result, result1 });
     } catch (err) {
       return res.status(200).json({ serverResponse: err });
     }
   }
 
-  //------------ Agregar Pedido Cliente ---------
+  //------------ Agregar Pedido a Cliente ---------
   public async addPedidoClients(req: Request, res: Response) {
     let idCl: string = req.params.id;
     let idPed = req.body.idPed;
     if (idCl == null && idPed == null) {
       res.status(300).json({
-        serverResponse:
-          "Id del cliente,  id de la reunion no fueron ingresados",
+        serverResponse: "Id del cliente,  id del Pedido no fueron ingresados",
       });
       return;
     }

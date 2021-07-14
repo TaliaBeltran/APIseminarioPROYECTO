@@ -17,6 +17,9 @@ interface Icredentials {
 }
 class RoutesController {
   constructor() {}
+
+  //---------LOGIN----------------
+
   public async login(request: Request, response: Response) {
     var credentials: Icredentials = request.body;
     if (credentials.email == undefined && credentials.username == undefined) {
@@ -81,11 +84,14 @@ class RoutesController {
     response.status(201).json({ serverResponse: result });
   }
 
+  // -------MOSTRAR TODOS LOS USUARIOS----------------
+
   public async getUsers(request: Request, response: Response) {
     var user: BusinessUser = new BusinessUser();
     const result: Array<IUser> = await user.readUsers();
     response.status(200).json({ serverResponse: result });
   }
+  // ---muestra un solo usuario seleccionado ---------------
 
   public async getOnlyUsers(request: Request, response: Response) {
     var user: BusinessUser = new BusinessUser();
@@ -93,6 +99,8 @@ class RoutesController {
     const result: IUser = await user.readOnlyUsers(id);
     response.status(200).json({ serverResponse: result });
   }
+
+  //--------ACTUALIZAR USUARIOS --------------
 
   public async updateUsers(request: Request, response: Response) {
     var user: BusinessUser = new BusinessUser();
@@ -103,17 +111,23 @@ class RoutesController {
     response.status(200).json({ serverResponse: result });
     return;
   }
+
+  // -------ELIMINAR USUARIO ------------------
+
   public async removeUsers(request: Request, response: Response) {
     var user: BusinessUser = new BusinessUser();
     let id: string = request.params.id;
     let result = await user.deleteUsers(id);
     response.status(200).json({ serverResponse: result });
   }
+
+  // ---------AÑADIR ROL A UN USUARIO ------------------
+
   public async addRol(request: Request, response: Response) {
     let idUs: string = request.params.id;
     let idRol = request.body.idRol;
     if (idUs == null && idRol == null) {
-      response.status(300).json({
+      response.status(200).json({
         serverResponse: "No se definio id de usuario ni el id del rol",
       });
       return;
@@ -128,6 +142,9 @@ class RoutesController {
     }
     response.status(200).json({ serverResponse: result });
   }
+
+  //----- CREAR ROL ------------------
+
   public async createRol(request: Request, response: Response) {
     let roles: BussinessRoles = new BussinessRoles();
     var rolesData: any = request.body;
@@ -140,11 +157,16 @@ class RoutesController {
     }
     response.status(201).json({ serverResponse: result });
   }
+
+  // -------- MOSTRAR TODOS LOS ROLEES -----------------
+
   public async getRol(request: Request, response: Response) {
     let roles: BussinessRoles = new BussinessRoles();
     let rolesData: Array<IRoles> = await roles.readRoles();
     response.status(200).json({ serverResponse: rolesData });
   }
+
+  //---ELIMIBAR ROL --------------
 
   public async removeRol(request: Request, response: Response) {
     let roles: BussinessRoles = new BussinessRoles();
@@ -152,6 +174,9 @@ class RoutesController {
     let result = await roles.deleteRol(idRol);
     response.status(201).json({ serverResponse: result });
   }
+
+  //----------ELIMINAR ROL DE UN USUARIO -----------------
+
   public async removeUserRol(request: Request, response: Response) {
     let roles: BusinessUser = new BusinessUser();
     let idUs: string = request.params.id;
@@ -159,6 +184,7 @@ class RoutesController {
     let result = await roles.removeRol(idUs, idRol);
     response.status(200).json({ serverResponse: result });
   }
+  //----SUBIR FOTO PARA UN USUARIO-------------
 
   public async uploadPortrait(request: Request, response: Response) {
     var id: string = request.params.id;
@@ -239,6 +265,8 @@ class RoutesController {
     }
   }
 
+  // -------MOSTRAR LA FOTO DE UN USUARIO ----------------
+
   public async getPortrait(request: Request, response: Response) {
     var id: string = request.params.id;
     try {
@@ -263,6 +291,7 @@ class RoutesController {
     }
     response.sendFile(userData.pathavatar);
   }
+  // ----------AÑADIR CLIENTE A USUARIO-----------
 
   public async addClient(request: Request, response: Response) {
     let idUs: string = request.params.id;
@@ -289,6 +318,7 @@ class RoutesController {
       return response.status(200).json({ serverResponse: err });
     }
   }
+  // ---------ELIMINAR CLIENTE DE USUARIO------------
 
   public async removeClient(request: Request, response: Response) {
     let user: BusinessUser = new BusinessUser();

@@ -1,6 +1,7 @@
 import ClientsModel, { IClients } from "../models/Clients";
 import PedidosModel, { IPedidos } from "../../pedidosmodule/models/pedidos";
 import UsersModel, { IUser, ISimpleUser } from "../../usermodule/models/Users";
+import Clients from "../models/Clients";
 class BusinessClient {
   constructor() {}
   // ----------------- Agregar cliente -------------
@@ -42,45 +43,6 @@ class BusinessClient {
     } else {
       let listClient: Array<IClients> = await ClientsModel.find();
       return listClient;
-    }
-  }
-
-  // ------Obtener el Tipo de Cliente -------------
-  public async getTypeClient(idUs: string, tipo: string) {
-    let user = await UsersModel.find({ _id: idUs });
-    let client = await ClientsModel.find({ tipo: tipo });
-    console.log(client);
-    var result: Array<IClients> = client.filter((item: IClients) => {
-      //console.log(item.idUser + " " + idUs);
-      if (item.idUser.toString() == idUs.toString()) {
-        return true;
-      }
-      return false;
-    });
-    console.log(result);
-    if (client != null) {
-      return client;
-    }
-  }
-  //----- Obtener Nombres de  Clientes Regulares -------------
-  public async getNamesClientR(name: string, tipo: string) {
-    let regularexpresion: RegExp = new RegExp(name.toLowerCase(), "regular");
-    try {
-      var client: Array<IClients> = await ClientsModel.find();
-      var result: Array<IClients> = client.filter((item: IClients) => {
-        if (
-          item.tipo.toLowerCase() == tipo.toLowerCase() &&
-          (item.firtsname.toLowerCase().match(regularexpresion) ||
-            item.lastname.toLowerCase().match(regularexpresion))
-        ) {
-          return true;
-        }
-        console.log(item.tipo + "   ---" + tipo);
-        return false;
-      });
-      return result;
-    } catch (err) {
-      return err;
     }
   }
   // --------------- Actualizar Cliente -------------------

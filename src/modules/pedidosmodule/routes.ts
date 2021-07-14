@@ -16,7 +16,7 @@ class Routes {
     this.configureRoutes(app);
   }
   private configureRoutes(app: Express) {
-    //-------------RUtas del Pedido -----------------------
+    //-------------ROUTES  PEDIDO -----------------------
     app
       .route(`${this.routeparent}/pedidos`)
       .post(this.routesController.createPedido); // Crear Pedido
@@ -27,7 +27,7 @@ class Routes {
 
     app
       .route(`${this.routeparent}/pedidos/:idC`)
-      .get(this.routesController.getPedidoClient);
+      .get(this.routesController.getPedidoClient); // mostrar pedido de cliente
 
     app
       .route(`${this.routeparent}/pedidos/:id`)
@@ -38,7 +38,7 @@ class Routes {
       .delete(this.routesController.deletePedido); // Eliminar Pedido
 
     app
-      .route(`${this.routeparent}/addProduct/:idPedido/:idPro/:cant`)
+      .route(`${this.routeparent}/addProduct/:id/:cant`) //idPedido_cantidad a añadir
       .put(this.routesController.addProduct); // Agregar Producto
 
     app
@@ -47,9 +47,9 @@ class Routes {
 
     app
       .route(`${this.routeparent}/removeProduct/:id`)
-      .put(this.routesController.removeProduct); // Elimar Producto
+      .put(this.routesController.removeProduct); // Eliminar Producto
 
-    //-----------Rutas del Productos ------------------------
+    //----------ROUTES  PRODUCTO ------------------------
 
     app
       .route(`${this.routeparent}/producto`)
@@ -74,7 +74,7 @@ class Routes {
       .route(`${this.routeparent}/getimageProduct/:id`)
       .get(this.routesControllerP.getimageProduct); // Obtener Imagen del Producto
 
-    ///-------------Ruta de Recibo  -------------------
+    ///-------------ROUTE RECIBO -------------------
     app
       .route(`${this.routeparent}/pedidos/:idUs/:idCli/:idPed`)
       .put(this.routesControllerR.addReciboPedido); // Agregar Recibo del Pedido

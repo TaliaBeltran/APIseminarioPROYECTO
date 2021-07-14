@@ -2,7 +2,6 @@ import { Request, Response } from "express";
 import BussinessPedidos from "../businessController/BussinessPedidos";
 import BussinessProducts from "../businessController/BussinessProducts";
 import path from "path";
-import { validacion, isValueOk } from "../validation";
 import { IPedidos } from "../models/pedidos";
 import { IProducts } from "../models/Products";
 import isEmpty from "is-empty";
@@ -121,10 +120,14 @@ class RoutesControllerP {
     }
     return res.status(200).json({
       serverResponse:
-        "Imagen subida: " + subidas + ", imagen no subida: " + nosubidas,
+        "La imagen se subio correctamete: " +
+        subidas +
+        ", imagen no  subida: " +
+        nosubidas,
     });
   }
   //---------------- Obtener el Imagen de Producto ------------------------
+
   public async getimageProduct(req: Request, res: Response) {
     var id: string = req.params.id;
     try {
