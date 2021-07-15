@@ -42,6 +42,9 @@ class Routes {
     app
       .route(`${this.routeparent}/agendar`)
       .get(this.routesController.getreunion); // Mostrar Reunion
+    app
+      .route(`${this.routeparent}/agendar/:idReu`) // muestra un asolo reunion
+      .get(this.routesController.getOnyReunion);
 
     app
       .route(`${this.routeparent}/agendar/:id`)

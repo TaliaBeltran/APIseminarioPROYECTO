@@ -1,7 +1,6 @@
 import ReunionModel, { IReunion } from "../models/Agenda";
 import ClientModel, { IClients } from "../models/Clients";
 
-
 class BussinessReunion {
   // -------------- Crear Reunion ---------------------
   public async createReunion(dates: IReunion) {
@@ -18,17 +17,27 @@ class BussinessReunion {
   // -------------- Leer Reunion ---------------------
   public async readReunion(): Promise<Array<IReunion>>;
   public async readReunion(id: string): Promise<IReunion>;
-  public async readReunion( query: any, skip: number, limit: number): Promise<Array<IReunion>>;
-  public async readReunion( params1?: string | any, params2?: number, params3?: number ): Promise<Array<IReunion> | IReunion> {
+  public async readReunion(
+    query: any,
+    skip: number,
+    limit: number
+  ): Promise<Array<IReunion>>;
+  public async readReunion(
+    params1?: string | any,
+    params2?: number,
+    params3?: number
+  ): Promise<Array<IReunion> | IReunion> {
     try {
       if (params1 && typeof params1 == "string") {
-        var result: IReunion = await ReunionModel.findOne({ _id: params1, });
+        var result: IReunion = await ReunionModel.findOne({ _id: params1 });
 
         return result;
       } else if (params1) {
         let skip = params2 ? params2 : 0;
         let limit = params3 ? params3 : 1;
-        let listreunion: Array<IReunion> = await ReunionModel.find(params1).skip(skip).limit(limit);
+        let listreunion: Array<IReunion> = await ReunionModel.find(params1)
+          .skip(skip)
+          .limit(limit);
         return listreunion;
       } else {
         let listreunion: Array<IReunion> = await ReunionModel.find();
@@ -37,6 +46,16 @@ class BussinessReunion {
     } catch (err) {
       return err;
     }
+  }
+
+  // ---------mostrar un sola reunion ------
+
+  public async readOnyReu(idReu: string) {
+    let reunion = await ReunionModel.findOne({ _id: idReu });
+    if (reunion != null) {
+      return reunion;
+    }
+    return null;
   }
 
   // -------------- Actualizar Reunion ---------------------

@@ -201,6 +201,14 @@ class RoutesController {
       return res.status(300).json({ serverResponse: err });
     }
   }
+  // ---------- muestra una sola reunion ---------
+
+  public async getOnyReunion(request: Request, response: Response) {
+    let reunion: BussinessReunion = new BussinessReunion();
+    let idReu: string = request.params.idReu;
+    let result = await reunion.readOnyReu(idReu);
+    response.status(200).json({ serverResponse: result });
+  }
 
   // -------------- Actualizar Reunion -------------------
   public async updateReunion(req: Request, res: Response) {

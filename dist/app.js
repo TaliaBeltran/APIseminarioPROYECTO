@@ -27,6 +27,7 @@ const bodyParser = __importStar(require("body-parser"));
 const init_1 = __importDefault(require("./modules/usermodule/init"));
 const init_2 = __importDefault(require("./modules/clientsmodels/init"));
 const init_3 = __importDefault(require("./modules/pedidosmodule/init"));
+const init_4 = __importDefault(require("./modules/reportsmodule/init"));
 const mongoose_1 = __importDefault(require("mongoose"));
 const express_fileupload_1 = __importDefault(require("express-fileupload"));
 class App {
@@ -37,7 +38,7 @@ class App {
         this.initApp();
     }
     connectDatabase() {
-        let host = "mongodb://172.20.0.2:27017";
+        let host = "mongodb://172.27.0.3:27017";
         let database = process.env.DATABASE || "seminario";
         let connectionString = `${host}/${database}`;
         mongoose_1.default.connect(connectionString, {
@@ -46,11 +47,11 @@ class App {
         });
         //Eventos
         mongoose_1.default.connection.on("error", (err) => {
-            console.log("Connection Fail");
+            console.log("Connection FAIL");
             console.log(err);
         });
         mongoose_1.default.connection.on("open", () => {
-            console.log("* ------- DATABASE CONNECTION SUCCESS !!! -------------*");
+            console.log("* ------- DATABASE CONNECTION SUCCESS !!! ----------------*");
         });
         this.mongooseClient = mongoose_1.default;
     }
@@ -64,6 +65,7 @@ class App {
         const userModule = new init_1.default("/api", this.app);
         const clientModule = new init_2.default("/client", this.app);
         const pedidoModule = new init_3.default("/pedido", this.app);
+        const reportModule = new init_4.default("/report", this.app);
     }
 }
 exports.default = new App();

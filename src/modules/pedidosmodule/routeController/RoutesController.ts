@@ -32,7 +32,12 @@ class RoutesController {
       let result: Array<IPedidos> = await pedido.getPedidoClient(idC);
       return response.status(200).json({ serverResponse: result });
     } catch (err) {
-      return response.status(300).json({ serverResponse: "Ocurrio un error" });
+      return response
+        .status(300)
+        .json({
+          serverResponse:
+            "Ocurrio un error o este pedido no tiene cliente asignado ",
+        });
     }
   }
 
