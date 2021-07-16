@@ -30,6 +30,49 @@ class RoutesController {
     }
   }
 
+  /*/----------------
+
+  public async getTipoClient(request: Request, response: Response) {
+    let client: BussinessClient = new BussinessClient();
+    let tipo: string = request.params.date;
+    let id: string = request.params.id;
+    //console.log("inicio " + id + " "+ " final");
+    try {
+      let clientData: Array<IClients> | IClients = await client.getTipoClient(
+        id,
+        tipo
+      );
+      response.status(200).json({ serverResponse: clientData });
+    } catch (err) {
+      return response.status(300).json({ serverResponse: err });
+    }
+  }*/
+
+  // ------------
+  public async getClientRorP(request: Request, response: Response) {
+    let client: BussinessClient = new BussinessClient();
+    let tipo: string = request.params.tipo;
+    let name: string = request.params.name;
+    console.log(tipo);
+    console.log(name);
+    console.log("es cliente regular");
+    try {
+      if (tipo && (tipo == "Potencial" || tipo == "Regular")) {
+        let clientData: Array<IClients> | IClients = await client.getClientRorP(
+          name,
+          tipo
+        );
+        response.status(200).json({ serverResponse: clientData });
+      } else {
+        return response
+          .status(404)
+          .json({ serverResponse: "Coloque tipo de cliente valido" });
+      }
+    } catch (err) {
+      return response.status(300).json({ serverResponse: err });
+    }
+  }
+
   // -------------- Actualizar  Cliente -------------------
   public async updateClient(req: Request, res: Response) {
     var user: BussinessClient = new BussinessClient();

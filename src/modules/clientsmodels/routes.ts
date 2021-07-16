@@ -20,6 +20,14 @@ class Routes {
       .route(`${this.routeparent}/client`)
       .get(this.routesController.getClient); // Mostrar Clientes
 
+    /*app
+      .route(`${this.routeparent}/client/tipo/:tipo/:id`)
+      .get(this.routesController.getTipoClient);*/
+
+    app
+      .route(`${this.routeparent}/client/:tipo/:name`) //:tipo=regular/potencial.....name=nombre decliente regular
+      .get(this.routesController.getClientRorP); // muestra nombre d ecliente regular/potencial
+
     app
       .route(`${this.routeparent}/client/:id`)
       .put(this.routesController.updateClient); // Actualoizar Cliente
@@ -56,7 +64,7 @@ class Routes {
 
     app
       .route(`${this.routeparent}/addreunion/:id`) //  idCl_ al que se le quiere agregar la reunion
-      .put(this.routesController.addReunion); // Agregar Reunion
+      .put(this.routesController.addReunion); // Agregar Reunion a un cliente
 
     app
       .route(`${this.routeparent}/removereunion/:id`) //idCl_ al que se le quiere eliminar la reunion

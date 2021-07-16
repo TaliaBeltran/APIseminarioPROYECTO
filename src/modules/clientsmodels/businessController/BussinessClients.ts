@@ -45,6 +45,49 @@ class BusinessClient {
       return listClient;
     }
   }
+  // -----------------
+  /*public async getTipoClient(idUs: string, tipo: string) {
+    let user = await UsersModel.find({ _id: idUs });
+    let client = await ClientsModel.find({ tipo: tipo });
+    console.log("prueba");
+    var result: Array<IClients> = client.filter((item: IClients) => {
+      console.log(item.idUser + " " + idUs);
+      if (item.idUser.toString() == idUs.toString()) {
+        return true;
+      }
+
+      return false;
+    });
+    console.log(result);
+    if (result != null) {
+      return result;
+    }
+    return null;
+  }
+*/
+  // -------------MOSTRAR  CLIENTE REGULAR o POTENCIAL-------------
+
+  public async getClientRorP(name: string, tipo: string) {
+    let regularexpresion: RegExp = new RegExp(name.toLowerCase(), "g");
+    try {
+      var client: Array<IClients> = await ClientsModel.find();
+      var result: Array<IClients> = client.filter((item: IClients) => {
+        if (
+          item.tipo.toLowerCase() == tipo.toLowerCase() &&
+          (item.firtsname.toLowerCase().match(regularexpresion) ||
+            item.lastname.toLowerCase().match(regularexpresion))
+        ) {
+          return true;
+        }
+        console.log(item.tipo + "   ---" + tipo);
+        return false;
+      });
+      return result;
+    } catch (err) {
+      return err;
+    }
+  }
+
   // --------------- Actualizar Cliente -------------------
   public async updateClient(id: string, client: any) {
     let result = await ClientsModel.update({ _id: id }, { $set: client });
