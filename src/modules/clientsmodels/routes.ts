@@ -20,10 +20,6 @@ class Routes {
       .route(`${this.routeparent}/client`)
       .get(this.routesController.getClient); // Mostrar Clientes
 
-    /*app
-      .route(`${this.routeparent}/client/tipo/:tipo/:id`)
-      .get(this.routesController.getTipoClient);*/
-
     app
       .route(`${this.routeparent}/client/:tipo/:name`) //:tipo=regular/potencial.....name=nombre decliente regular
       .get(this.routesController.getClientRorP); // muestra nombre d ecliente regular/potencial

@@ -30,25 +30,8 @@ class RoutesController {
     }
   }
 
-  /*/----------------
+  // ------------ Mostrar cliente regular o potencial------------------------
 
-  public async getTipoClient(request: Request, response: Response) {
-    let client: BussinessClient = new BussinessClient();
-    let tipo: string = request.params.date;
-    let id: string = request.params.id;
-    //console.log("inicio " + id + " "+ " final");
-    try {
-      let clientData: Array<IClients> | IClients = await client.getTipoClient(
-        id,
-        tipo
-      );
-      response.status(200).json({ serverResponse: clientData });
-    } catch (err) {
-      return response.status(300).json({ serverResponse: err });
-    }
-  }*/
-
-  // ------------
   public async getClientRorP(request: Request, response: Response) {
     let client: BussinessClient = new BussinessClient();
     let tipo: string = request.params.tipo;
